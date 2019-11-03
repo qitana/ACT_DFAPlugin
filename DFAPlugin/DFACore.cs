@@ -45,7 +45,7 @@ namespace Qitana.DFAPlugin
         private bool IsProcessChanged { get; set; } = false;
         public bool IsActive => true;
         public string State => this._state.ToString();
-        public int RouletteCode => this._rouletteCode;
+        public int RouletteCode { get; private set; } = 0;
         public int Code { get; private set; } = 0;
 
         public DFACore()
@@ -353,17 +353,70 @@ namespace Qitana.DFAPlugin
                 var opcode = BitConverter.ToUInt16(message, 18);
 
 #if !DEBUG
-                if (opcode != 0x0078 &&
-                    opcode != 0x0079 &&
-                    opcode != 0x0080 &&
-                    opcode != 0x006C &&
-                    opcode != 0x006F &&
-                    opcode != 0x0121 &&
-                    opcode != 0x0143 &&
-                    opcode != 0x022F)
+                // 本番用。使うものだけ入れる
+                if (
+                    opcode != 0x008F &&
+                    opcode != 0x00B3 &&
+                    opcode != 0x009A &&
+                    opcode != 0x00AE &&
+                    opcode != 0x0257
+                    )
                     return;
 #endif
+
+#if DEBUG
+                // opcodeが変わったと思われる場合はここを全部作り直し
+                // 宿屋で何もしなくても出るものをブロック。
+                if (
+                    opcode == 0x022F ||
+                    opcode == 0x0264 ||
+                    opcode == 0x0346 ||
+                    opcode == 0x00C7 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0000
+                    ) 
+                    return;
+
+                // opcodeが変わったと思われる場合はここを全部作り直し
+                // CF関連で出るものを列挙。ここに入れればログにByte列が出力される。
+                if (
+                    opcode == 0x035A ||
+                    opcode == 0x008F ||
+                    opcode == 0x0164 ||
+                    opcode == 0x015E ||
+                    opcode == 0x019F ||
+                    opcode == 0x009A ||
+                    opcode == 0x00B3 ||
+                    opcode == 0x01C7 ||
+                    opcode == 0x00AE ||
+                    opcode == 0x01E1 ||
+                    opcode == 0x03AD ||
+                    opcode == 0x0257 ||
+                    opcode == 0x1019 ||
+                    opcode == 0x0002 ||
+                    opcode == 0x03D2 ||
+                    opcode == 0x0304 ||
+                    opcode == 0x02D6 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0000
+                    )
+                {
+                    var d = message.Skip(32).Take(32).ToArray();
+                    DFACoreLog($"Opcode: [{opcode.ToString("X4")}] {BitConverter.ToString(d)}");
+                }
+                else
+                {
+                    // opcodeが変わったと思われる場合、Opcodeを出力して全部確認する
+                    //DFACoreLog($"Opcode: [{opcode.ToString("X4")}]");
+                    return;
+                }
+
+#endif
                 var data = message.Skip(32).ToArray();
+                #region OLD_CODE
                 if (opcode == 0x022F) // Entering/Leaving an instance
                 {
                     var code = BitConverter.ToInt16(data, 4);
@@ -527,6 +580,73 @@ namespace Qitana.DFAPlugin
 
                     DFACoreLog($"Q: Matched [{code}]");
                 }
+                #endregion
+
+                switch (opcode)
+                {
+                    case 0x008F: // Duty
+                        var duty_roulette = BitConverter.ToUInt16(data, 8);
+                        var duty_dungeon = BitConverter.ToUInt16(data, 12);
+
+                        if (duty_roulette != 0)
+                        {
+                            RouletteCode = duty_roulette;
+                            Code = 0;
+                            state = MatchingState.QUEUED;
+                            DFACoreLog($"Q: QUEUED to roulette [{duty_roulette}]");
+                        }
+                        else
+                        {
+                            RouletteCode = 0;
+                            Code = duty_dungeon;
+                            state = MatchingState.QUEUED;
+                            DFACoreLog($"Q: QUEUED to dungeon [{duty_dungeon}]");
+                        }
+
+                        break;
+
+                    case 0x00B3: // Matched
+                        var matched_roulette = BitConverter.ToUInt16(data, 2);
+                        var matched_code = BitConverter.ToUInt16(data, 20);
+                        RouletteCode = matched_roulette;
+                        Code = matched_code;
+                        state = MatchingState.MATCHED;
+                        DFACoreLog($"Q: Matched [{matched_roulette}/{matched_code}]");
+                        break;
+
+                    case 0x009A: // operation??
+                        switch (data[0])
+                        {
+                            case 0x73: // canceled by me
+                                RouletteCode = 0;
+                                Code = 0;
+                                state = MatchingState.IDLE;
+                                DFACoreLog($"Q: Canceled by me.");
+                                break;
+                            case 0x81: // duty requested
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 0x00AE: // status update??
+                        var top = data[0];
+                        var status = data[13];
+                        var tank = data[14];
+                        var healer = data[15];
+                        var dps = data[16];
+                        DFACoreLog($"Q: [{top}/{status}] tank/healer/dps = {tank}/{healer}/{dps}");
+                        break;
+                    case 0x0257: // area change
+                        var area_code = BitConverter.ToUInt16(data, 4);
+                        state = MatchingState.IDLE;
+                        DFACoreLog($"I: Entered Area [{area_code}]");
+                        break;
+
+                    default:
+                        break;
+                }
+
             }
             catch (Exception ex)
             {
