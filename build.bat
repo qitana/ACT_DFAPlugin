@@ -55,8 +55,6 @@ if not exist "%~dp0\Thirdparty\FFXIV_ACT_Plugin\Machina.FFXIV.dll" (
 	goto END
 )
 
-
-
 set DOTNET_PATH=%windir%\Microsoft.NET\Framework\v4.0.30319
 if not exist %DOTNET_PATH% (
 	echo エラー: .NET Framework のディレクトリが見つかりません。ビルドを実行するためには .NET Framework 4.6以上がインストールされている必要があります。
