@@ -584,22 +584,21 @@ namespace Qitana.DFAPlugin
                 {
                     case 0x008F: // Duty
                         var duty_roulette = BitConverter.ToUInt16(data, 8);
-                        var duty_dungeon = BitConverter.ToUInt16(data, 12);
+                        var duty_code = BitConverter.ToUInt16(data, 12);
 
                         if (duty_roulette != 0)
                         {
                             RouletteCode = duty_roulette;
                             Code = 0;
                             state = MatchingState.QUEUED;
-                            DFACoreLog($"Q: QUEUED to roulette [{duty_roulette}]");
                         }
                         else
                         {
                             RouletteCode = 0;
-                            Code = duty_dungeon;
+                            Code = duty_code;
                             state = MatchingState.QUEUED;
-                            DFACoreLog($"Q: QUEUED to dungeon [{duty_dungeon}]");
                         }
+                        DFACoreLog($"Q: QUEUED [{duty_roulette}/{duty_code}]");
 
                         break;
 
@@ -615,11 +614,11 @@ namespace Qitana.DFAPlugin
                     case 0x009A: // operation??
                         switch (data[0])
                         {
-                            case 0x73: // canceled by me
+                            case 0x73: // canceled (by me?)
                                 RouletteCode = 0;
                                 Code = 0;
                                 state = MatchingState.IDLE;
-                                DFACoreLog($"Q: Canceled by me.");
+                                DFACoreLog($"Q: Canceled");
                                 break;
                             case 0x81: // duty requested
                                 break;
