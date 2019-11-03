@@ -383,9 +383,7 @@ namespace Qitana.DFAPlugin
                 if (
                     opcode == 0x035A ||
                     opcode == 0x008F ||
-                    opcode == 0x0164 ||
                     opcode == 0x015E ||
-                    opcode == 0x019F ||
                     opcode == 0x009A ||
                     opcode == 0x00B3 ||
                     opcode == 0x01C7 ||
