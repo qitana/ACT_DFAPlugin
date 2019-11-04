@@ -38,7 +38,9 @@ var DFAStatus = new Vue({
       }
 
       this.stats.DutyStatus = e.detail.DFAData.State;
-      if (e.detail.DFAData.State == "IDLE" && Date.now() - lastMatched > 5000) {
+      if (e.detail.DFAData.State == "IDLE" && Date.now() - lastMatched > 10000) {
+        this.stats.Hide = true;
+      } else if (e.detail.DFAData.State == "MATCHED" && Date.now() - lastMatched > 65000) {
         this.stats.Hide = true;
       } else {
         this.stats.Hide = false;
@@ -47,6 +49,9 @@ var DFAStatus = new Vue({
       this.stats.Roulette.Code = e.detail.DFAData.RouletteCode;
       if (Number(e.detail.DFAData.RouletteCode) > 0) {
         this.stats.Roulette.Name = dic.roulettes[e.detail.DFAData.RouletteCode];
+        if(!this.stats.Roulette.Name) {
+          this.stats.Roulette.Name = 'Unknown Roulette (' + e.detail.DFAData.RouletteCode + ')';
+        }
       } else {
         this.stats.Roulette.Name = '';
       }
@@ -54,11 +59,12 @@ var DFAStatus = new Vue({
       this.stats.Instance.Code = e.detail.DFAData.Code;
       if (Number(e.detail.DFAData.Code) > 0) {
         this.stats.Instance.Name = dic.instances[e.detail.DFAData.Code].name;
+        if(!this.stats.Instance.Name) {
+          this.stats.Instance.Name = 'Unknown Instance (' + e.detail.DFAData.Code + ')';
+        }
       } else {
         this.stats.Instance.Name = '';
       }
-
-
     },
     updateState: function (e) {
       this.locked = e.detail.isLocked;
