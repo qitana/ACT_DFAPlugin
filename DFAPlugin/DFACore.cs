@@ -393,7 +393,7 @@ namespace Qitana.DFAPlugin
                     opcode == 0x0000 ||
                     opcode == 0x0000 ||
                     opcode == 0x0000
-                    ) 
+                    )
                     return;
 
                 // opcodeが変わったと思われる場合はここを全部作り直し
@@ -601,9 +601,10 @@ namespace Qitana.DFAPlugin
                         var duty_roulette = BitConverter.ToUInt16(data, 8);
                         var duty_code = BitConverter.ToUInt16(data, 12);
 
-                        MatchedTank = MatchedHealer = MatchedDps = 0;
-                        WaitTime = 0;
-                        WaitList = 0;
+                        RouletteCode = Code = 0;
+                        QueuedTank = QueuedHealer = QueuedDps = QueuedTankMax = QueuedHealerMax = QueuedDpsMax = 0;
+                        MatchedTank = MatchedHealer = MatchedDps = MatchedTankMax = MatchedHealerMax = MatchedDpsMax = 0;
+                        WaitTime = WaitList = 0;
 
                         if (duty_roulette != 0)
                         {
@@ -633,8 +634,10 @@ namespace Qitana.DFAPlugin
                         switch (data[0])
                         {
                             case 0x73: // canceled (by me?)
-                                RouletteCode = 0;
-                                Code = 0;
+                                RouletteCode = Code = 0;
+                                QueuedTank = QueuedHealer = QueuedDps = QueuedTankMax = QueuedHealerMax = QueuedDpsMax = 0;
+                                MatchedTank = MatchedHealer = MatchedDps = MatchedTankMax = MatchedHealerMax = MatchedDpsMax = 0;
+                                WaitTime = WaitList = 0;
                                 state = MatchingState.IDLE;
                                 DFACoreLog($"Q: Canceled");
                                 break;
