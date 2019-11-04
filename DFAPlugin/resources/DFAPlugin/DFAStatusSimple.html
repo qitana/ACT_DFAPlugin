@@ -36,24 +36,6 @@
             <span class="value">{{stats.Instance.Name}}</span>
           </div>
         </div>
-        <div v-if="stats.IsQueued && !stats.IsRoulette" class="box">
-          <div class="name">
-            <span class="header">パーティ構築状況: </span>
-            <span class="value">残り:{{stats.QueuedParty.Remains}}人
-              ( Tank:{{stats.QueuedParty.Tank}}/{{stats.QueuedParty.TankMax}}
-              Healer:{{stats.QueuedParty.Healer}}/{{stats.QueuedParty.HealerMax}}
-              DPS:{{stats.QueuedParty.Dps}}/{{stats.QueuedParty.DpsMax}} )</span>
-          </div>
-        </div>
-        <div v-if="stats.IsMatched" class="box">
-          <div class="name">
-            <span class="header">パーティ構築状況: </span>
-            <span class="value">残り:{{stats.MatchedParty.Remains}}人
-              ( Tank:{{stats.MatchedParty.Tank}}/{{stats.MatchedParty.TankMax}}
-              Healer:{{stats.MatchedParty.Healer}}/{{stats.MatchedParty.HealerMax}}
-              DPS:{{stats.MatchedParty.Dps}}/{{stats.MatchedParty.DpsMax}} )</span>
-          </div>
-        </div>
         <!-- end of Front -->
       </div>
       <!-- end of inner -->
