@@ -657,14 +657,16 @@ namespace Qitana.DFAPlugin
                         var queuedHealerMax = data[11];
                         var queuedDps = data[12];
                         var queuedDpsMax = data[13];
+
                         WaitList = waitList;
                         WaitTime = waitTime;
                         QueuedTank = queuedTank;
-                        QueuedTankMax = queuedTankMax;
                         QueuedHealer = queuedHealer;
-                        QueuedHealerMax = queuedHealerMax;
                         QueuedDps = queuedDps;
+                        QueuedTankMax = queuedTankMax;
+                        QueuedHealerMax = queuedHealerMax;
                         QueuedDpsMax = queuedDpsMax;
+
                         DFACoreLog($"Q: waitList:{waitList} waitTime:{waitTime} tank:{queuedTank}/{queuedTankMax} healer:{queuedHealer}/{queuedHealerMax} dps:{queuedDps}/{queuedDpsMax}");
                         break;
 
@@ -678,7 +680,11 @@ namespace Qitana.DFAPlugin
 
                         MatchedTank = matchedTank;
                         MatchedHealer = matchedHealer;
+                        MatchedDpsMax = matchedDpsMax;
+                        MatchedTankMax = matchedTankMax;
+                        MatchedHealerMax = matchedHealerMax;
                         MatchedDps = matchedDps;
+
                         DFACoreLog($"M: tank:{matchedTank}/{matchedTankMax} healer:{matchedHealer}/{matchedHealerMax} dps:{matchedDps}/{matchedDpsMax}");
                         break;
 
