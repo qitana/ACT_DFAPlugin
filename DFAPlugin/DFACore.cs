@@ -47,6 +47,23 @@ namespace Qitana.DFAPlugin
         public string State => this._state.ToString();
         public int RouletteCode { get; private set; } = 0;
         public int Code { get; private set; } = 0;
+        public int WaitTime { get; private set; } = 0;
+        public int WaitList { get; private set; } = 0;
+
+        public int QueuedTank { get; private set; } = 0;
+        public int QueuedHealer { get; private set; } = 0;
+        public int QueuedDps { get; private set; } = 0;
+        public int QueuedTankMax { get; private set; } = 0;
+        public int QueuedHealerMax { get; private set; } = 0;
+        public int QueuedDpsMax { get; private set; } = 0;
+
+        public int MatchedTank { get; private set; } = 0;
+        public int MatchedHealer { get; private set; } = 0;
+        public int MatchedDps { get; private set; } = 0;
+        public int MatchedTankMax { get; private set; } = 0;
+        public int MatchedHealerMax { get; private set; } = 0;
+        public int MatchedDpsMax { get; private set; } = 0;
+
 
         public DFACore()
         {
@@ -358,6 +375,7 @@ namespace Qitana.DFAPlugin
                     opcode != 0x008F &&
                     opcode != 0x00B3 &&
                     opcode != 0x009A &&
+                    opcode != 0x0304 &&
                     opcode != 0x00AE &&
                     opcode != 0x0257
                     )
@@ -383,13 +401,10 @@ namespace Qitana.DFAPlugin
                 if (
                     opcode == 0x035A ||
                     opcode == 0x008F ||
-                    opcode == 0x015E ||
                     opcode == 0x009A ||
                     opcode == 0x00B3 ||
                     opcode == 0x01C7 ||
                     opcode == 0x00AE ||
-                    opcode == 0x01E1 ||
-                    opcode == 0x03AD ||
                     opcode == 0x0257 ||
                     opcode == 0x1019 ||
                     opcode == 0x0002 ||
@@ -586,6 +601,10 @@ namespace Qitana.DFAPlugin
                         var duty_roulette = BitConverter.ToUInt16(data, 8);
                         var duty_code = BitConverter.ToUInt16(data, 12);
 
+                        MatchedTank = MatchedHealer = MatchedDps = 0;
+                        WaitTime = 0;
+                        WaitList = 0;
+
                         if (duty_roulette != 0)
                         {
                             RouletteCode = duty_roulette;
@@ -599,7 +618,6 @@ namespace Qitana.DFAPlugin
                             state = MatchingState.QUEUED;
                         }
                         DFACoreLog($"Q: QUEUED [{duty_roulette}/{duty_code}]");
-
                         break;
 
                     case 0x00B3: // Matched
@@ -626,24 +644,53 @@ namespace Qitana.DFAPlugin
                                 break;
                         }
                         break;
-                    case 0x00AE: // status update??
-                        var top = data[0];
-                        var status = data[13];
-                        var tank = data[14];
-                        var healer = data[15];
-                        var dps = data[16];
-                        DFACoreLog($"Q: [{top}/{status}] tank/healer/dps = {tank}/{healer}/{dps}");
+
+                    case 0x0304: // wait queue update
+                        var waitList = data[6];
+                        var waitTime = data[7];
+                        var queuedTank = data[8];
+                        var queuedTankMax = data[9];
+                        var queuedHealer = data[10];
+                        var queuedHealerMax = data[11];
+                        var queuedDps = data[12];
+                        var queuedDpsMax = data[13];
+                        WaitList = waitList;
+                        WaitTime = waitTime;
+                        QueuedTank = queuedTank;
+                        QueuedTankMax = queuedTankMax;
+                        QueuedHealer = queuedHealer;
+                        QueuedHealerMax = queuedHealerMax;
+                        QueuedDps = queuedDps;
+                        QueuedDpsMax = queuedDpsMax;
+                        DFACoreLog($"Q: waitList:{waitList} waitTime:{waitTime} tank:{queuedTank}/{queuedTankMax} healer:{queuedHealer}/{queuedHealerMax} dps:{queuedDps}/{queuedDpsMax}");
                         break;
+
+                    case 0x00AE: // party update after matched
+                        var matchedTank = data[12];
+                        var matchedTankMax = data[13];
+                        var matchedHealer = data[14];
+                        var matchedHealerMax = data[15];
+                        var matchedDps = data[16];
+                        var matchedDpsMax = data[17];
+
+                        MatchedTank = matchedTank;
+                        MatchedHealer = matchedHealer;
+                        MatchedDps = matchedDps;
+                        DFACoreLog($"M: tank:{matchedTank}/{matchedTankMax} healer:{matchedHealer}/{matchedHealerMax} dps:{matchedDps}/{matchedDpsMax}");
+                        break;
+
                     case 0x0257: // area change
-                        var area_code = BitConverter.ToUInt16(data, 4);
-                        state = MatchingState.IDLE;
-                        DFACoreLog($"I: Entered Area [{area_code}]");
+                        if (state == MatchingState.MATCHED)
+                        {
+                            state = MatchingState.IDLE;
+                            var area_code = BitConverter.ToUInt16(data, 4);
+                            DFACoreLog($"I: Entered Area [{area_code}]");
+                        }
                         break;
 
                     default:
                         break;
                 }
-
             }
             catch (Exception ex)
             {
