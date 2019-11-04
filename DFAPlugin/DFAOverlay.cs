@@ -32,47 +32,6 @@ namespace Qitana.DFAPlugin
             base.Dispose();
         }
 
-        /*
-        public void ChangeProcessId(int processId)
-        {
-            lock (_lock)
-            {
-                Process p = null;
-
-                if (Config.FollowFFXIVPlugin)
-                {
-                    if (FFXIVPluginHelper.Instance != null)
-                    {
-                        p = FFXIVPluginHelper.GetFFXIVProcess;
-                    }
-                }
-                else
-                {
-                    p = FFXIVProcessHelper.GetFFXIVProcess(processId);
-                }
-
-                if ((DFAController == null && p != null) ||
-                    (DFAController != null && p != null && p.Id != DFAController.Process.Id))
-                {
-                    try
-                    {
-                        DFAController = new DFAController(this, p);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogError(ex.Message);
-                        suppress_log = true;
-                        DFAController = null;
-                    }
-                }
-                else if (DFAController != null && p == null)
-                {
-                    DFAController.Dispose();
-                    DFAController = null;
-                }
-            }
-        }
-        */
         public void LogDebug(string format, params object[] args)
         {
             string prefix = isDebug ? "DEBUG: " : "";
@@ -98,60 +57,6 @@ namespace Qitana.DFAPlugin
 
         public void LogInfo(string format, params object[] args)
             => Log(LogLevel.Info, format, args);
-
-
-
-        /*
-        /// <summary>
-        /// プロセスの有効性をチェック
-        /// </summary>
-        private void CheckProcessId()
-        {
-            try
-            {
-                if (Config.FollowFFXIVPlugin)
-                {
-                    Process p = null;
-                    if (FFXIVPluginHelper.Instance != null)
-                    {
-                        p = FFXIVPluginHelper.GetFFXIVProcess;
-                        if (p == null || (DFAController != null && DFAController.Process.Id != p.Id))
-                        {
-                            DFAController?.Dispose();
-                            DFAController = null;
-                        }
-                    }
-                }
-
-                if (DFAController == null)
-                {
-                    ChangeProcessId(0);
-                }
-                else if (DFAController.ValidateProcess())
-                {
-                    // スキャン間隔をもどす
-                    if (timer.Interval != this.Config.Interval)
-                    {
-                        timer.Interval = this.Config.Interval;
-                    }
-
-                    if (suppress_log == true)
-                    {
-                        suppress_log = false;
-                    }
-                }
-                else
-                {
-                    DFAController?.Dispose();
-                    DFAController = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError(ex.Message);
-            }
-        }
-        */
 
 
         protected override void Update()
