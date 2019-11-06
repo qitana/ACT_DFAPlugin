@@ -36,11 +36,7 @@ namespace Qitana.DFAPlugin
         private FFXIVNetworkMonitor.MessageReceivedDelegate messageReceivedDelegate;
         private TCPNetworkMonitor.DataReceivedDelegate dataRecievedDelegate; // 使わない
 
-
         private MatchingState _state = MatchingState.IDLE;
-        private byte _rouletteCode = 0;
-        private int _lastMember;
-        private bool _netCompatibility;
 
         private bool IsProcessChanged { get; set; } = false;
         public bool IsActive => true;
