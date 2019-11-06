@@ -488,6 +488,12 @@ namespace Qitana.DFAPlugin
                         var queuedDps = data[12];
                         var queuedDpsMax = data[13];
 
+                        if (state == MatchingState.MATCHED)
+                        {
+                            state = MatchingState.QUEUED;
+                            MatchedTank = MatchedHealer = MatchedDps = MatchedTankMax = MatchedHealerMax = MatchedDpsMax = 0;
+                        }
+
                         WaitList = waitList;
                         WaitTime = waitTime;
                         QueuedTank = queuedTank;
