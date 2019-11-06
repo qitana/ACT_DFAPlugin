@@ -193,21 +193,21 @@ namespace Qitana.DFAPlugin
             public string State { get; set; }
             public int RouletteCode { get; set; }
             public int Code { get; set; }
-            public int WaitList { get; set; }
-            public int WaitTime { get; set; }
+            public uint WaitList { get; set; }
+            public uint WaitTime { get; set; }
 
             public PartyStatus QueuedPartyStatus { get; set; } = new PartyStatus();
             public PartyStatus MatchedPartyStatus { get; set; } = new PartyStatus();
 
             public class PartyStatus
             {
-                public int Tank { get; set; } = 0;
-                public int Healer { get; set; } = 0;
-                public int Dps { get; set; } = 0;
+                public uint Tank { get; set; } = 0;
+                public uint Healer { get; set; } = 0;
+                public uint Dps { get; set; } = 0;
 
-                public int TankMax { get; set; } = 0;
-                public int HealerMax { get; set; } = 0;
-                public int DpsMax { get; set; } = 0;
+                public uint TankMax { get; set; } = 0;
+                public uint HealerMax { get; set; } = 0;
+                public uint DpsMax { get; set; } = 0;
 
             }
         }
