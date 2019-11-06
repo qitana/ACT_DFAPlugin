@@ -43,22 +43,22 @@ namespace Qitana.DFAPlugin
         public string State => this._state.ToString();
         public int RouletteCode { get; private set; } = 0;
         public int Code { get; private set; } = 0;
-        public int WaitTime { get; private set; } = 0;
-        public int WaitList { get; private set; } = 0;
+        public uint WaitTime { get; private set; } = 0;
+        public uint WaitList { get; private set; } = 0;
 
-        public int QueuedTank { get; private set; } = 0;
-        public int QueuedHealer { get; private set; } = 0;
-        public int QueuedDps { get; private set; } = 0;
-        public int QueuedTankMax { get; private set; } = 0;
-        public int QueuedHealerMax { get; private set; } = 0;
-        public int QueuedDpsMax { get; private set; } = 0;
+        public uint QueuedTank { get; private set; } = 0;
+        public uint QueuedHealer { get; private set; } = 0;
+        public uint QueuedDps { get; private set; } = 0;
+        public uint QueuedTankMax { get; private set; } = 0;
+        public uint QueuedHealerMax { get; private set; } = 0;
+        public uint QueuedDpsMax { get; private set; } = 0;
 
-        public int MatchedTank { get; private set; } = 0;
-        public int MatchedHealer { get; private set; } = 0;
-        public int MatchedDps { get; private set; } = 0;
-        public int MatchedTankMax { get; private set; } = 0;
-        public int MatchedHealerMax { get; private set; } = 0;
-        public int MatchedDpsMax { get; private set; } = 0;
+        public uint MatchedTank { get; private set; } = 0;
+        public uint MatchedHealer { get; private set; } = 0;
+        public uint MatchedDps { get; private set; } = 0;
+        public uint MatchedTankMax { get; private set; } = 0;
+        public uint MatchedHealerMax { get; private set; } = 0;
+        public uint MatchedDpsMax { get; private set; } = 0;
 
 
         public DFACore()
