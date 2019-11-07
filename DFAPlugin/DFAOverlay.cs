@@ -32,47 +32,6 @@ namespace Qitana.DFAPlugin
             base.Dispose();
         }
 
-        /*
-        public void ChangeProcessId(int processId)
-        {
-            lock (_lock)
-            {
-                Process p = null;
-
-                if (Config.FollowFFXIVPlugin)
-                {
-                    if (FFXIVPluginHelper.Instance != null)
-                    {
-                        p = FFXIVPluginHelper.GetFFXIVProcess;
-                    }
-                }
-                else
-                {
-                    p = FFXIVProcessHelper.GetFFXIVProcess(processId);
-                }
-
-                if ((DFAController == null && p != null) ||
-                    (DFAController != null && p != null && p.Id != DFAController.Process.Id))
-                {
-                    try
-                    {
-                        DFAController = new DFAController(this, p);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogError(ex.Message);
-                        suppress_log = true;
-                        DFAController = null;
-                    }
-                }
-                else if (DFAController != null && p == null)
-                {
-                    DFAController.Dispose();
-                    DFAController = null;
-                }
-            }
-        }
-        */
         public void LogDebug(string format, params object[] args)
         {
             string prefix = isDebug ? "DEBUG: " : "";
@@ -98,60 +57,6 @@ namespace Qitana.DFAPlugin
 
         public void LogInfo(string format, params object[] args)
             => Log(LogLevel.Info, format, args);
-
-
-
-        /*
-        /// <summary>
-        /// プロセスの有効性をチェック
-        /// </summary>
-        private void CheckProcessId()
-        {
-            try
-            {
-                if (Config.FollowFFXIVPlugin)
-                {
-                    Process p = null;
-                    if (FFXIVPluginHelper.Instance != null)
-                    {
-                        p = FFXIVPluginHelper.GetFFXIVProcess;
-                        if (p == null || (DFAController != null && DFAController.Process.Id != p.Id))
-                        {
-                            DFAController?.Dispose();
-                            DFAController = null;
-                        }
-                    }
-                }
-
-                if (DFAController == null)
-                {
-                    ChangeProcessId(0);
-                }
-                else if (DFAController.ValidateProcess())
-                {
-                    // スキャン間隔をもどす
-                    if (timer.Interval != this.Config.Interval)
-                    {
-                        timer.Interval = this.Config.Interval;
-                    }
-
-                    if (suppress_log == true)
-                    {
-                        suppress_log = false;
-                    }
-                }
-                else
-                {
-                    DFAController?.Dispose();
-                    DFAController = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogError(ex.Message);
-            }
-        }
-        */
 
 
         protected override void Update()
@@ -288,21 +193,21 @@ namespace Qitana.DFAPlugin
             public string State { get; set; }
             public int RouletteCode { get; set; }
             public int Code { get; set; }
-            public int WaitList { get; set; }
-            public int WaitTime { get; set; }
+            public uint WaitList { get; set; }
+            public uint WaitTime { get; set; }
 
             public PartyStatus QueuedPartyStatus { get; set; } = new PartyStatus();
             public PartyStatus MatchedPartyStatus { get; set; } = new PartyStatus();
 
             public class PartyStatus
             {
-                public int Tank { get; set; } = 0;
-                public int Healer { get; set; } = 0;
-                public int Dps { get; set; } = 0;
+                public uint Tank { get; set; } = 0;
+                public uint Healer { get; set; } = 0;
+                public uint Dps { get; set; } = 0;
 
-                public int TankMax { get; set; } = 0;
-                public int HealerMax { get; set; } = 0;
-                public int DpsMax { get; set; } = 0;
+                public uint TankMax { get; set; } = 0;
+                public uint HealerMax { get; set; } = 0;
+                public uint DpsMax { get; set; } = 0;
 
             }
         }

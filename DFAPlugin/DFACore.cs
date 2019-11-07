@@ -36,33 +36,29 @@ namespace Qitana.DFAPlugin
         private FFXIVNetworkMonitor.MessageReceivedDelegate messageReceivedDelegate;
         private TCPNetworkMonitor.DataReceivedDelegate dataRecievedDelegate; // 使わない
 
-
         private MatchingState _state = MatchingState.IDLE;
-        private byte _rouletteCode = 0;
-        private int _lastMember;
-        private bool _netCompatibility;
 
         private bool IsProcessChanged { get; set; } = false;
         public bool IsActive => true;
         public string State => this._state.ToString();
         public int RouletteCode { get; private set; } = 0;
         public int Code { get; private set; } = 0;
-        public int WaitTime { get; private set; } = 0;
-        public int WaitList { get; private set; } = 0;
+        public uint WaitTime { get; private set; } = 0;
+        public uint WaitList { get; private set; } = 0;
 
-        public int QueuedTank { get; private set; } = 0;
-        public int QueuedHealer { get; private set; } = 0;
-        public int QueuedDps { get; private set; } = 0;
-        public int QueuedTankMax { get; private set; } = 0;
-        public int QueuedHealerMax { get; private set; } = 0;
-        public int QueuedDpsMax { get; private set; } = 0;
+        public uint QueuedTank { get; private set; } = 0;
+        public uint QueuedHealer { get; private set; } = 0;
+        public uint QueuedDps { get; private set; } = 0;
+        public uint QueuedTankMax { get; private set; } = 0;
+        public uint QueuedHealerMax { get; private set; } = 0;
+        public uint QueuedDpsMax { get; private set; } = 0;
 
-        public int MatchedTank { get; private set; } = 0;
-        public int MatchedHealer { get; private set; } = 0;
-        public int MatchedDps { get; private set; } = 0;
-        public int MatchedTankMax { get; private set; } = 0;
-        public int MatchedHealerMax { get; private set; } = 0;
-        public int MatchedDpsMax { get; private set; } = 0;
+        public uint MatchedTank { get; private set; } = 0;
+        public uint MatchedHealer { get; private set; } = 0;
+        public uint MatchedDps { get; private set; } = 0;
+        public uint MatchedTankMax { get; private set; } = 0;
+        public uint MatchedHealerMax { get; private set; } = 0;
+        public uint MatchedDpsMax { get; private set; } = 0;
 
 
         public DFACore()
@@ -429,172 +425,6 @@ namespace Qitana.DFAPlugin
 
 #endif
                 var data = message.Skip(32).ToArray();
-                #region OLD_CODE
-                if (opcode == 0x022F) // Entering/Leaving an instance
-                {
-                    var code = BitConverter.ToInt16(data, 4);
-                    Code = code;
-                    if (code == 0)
-                        return;
-
-                    var type = data[8];
-
-                    if (type == 0x0B)
-                    {
-                        DFACoreLog($"I: Entered Instance Area [{code}]");
-                    }
-                    else if (type == 0x0C)
-                    {
-                        DFACoreLog($"I: Left Instance Area [{code}]");
-                    }
-                }
-                else if (opcode == 0x0078) // Duties
-                {
-                    var status = data[0];
-                    var reason = data[4];
-
-                    if (status == 0) // Apply for Duties
-                    {
-                        _netCompatibility = false;
-                        state = MatchingState.QUEUED;
-
-                        _rouletteCode = data[20];
-
-                        if (_rouletteCode != 0 && (data[15] == 0 || data[15] == 64)
-                        ) // Roulette, on Korean Server || on Global Server
-                        {
-                            DFACoreLog($"Q: Duty Roulette Matching Started [{_rouletteCode}]");
-                        }
-                        else // Specific Duty (Dungeon/Trial/Raid)
-                        {
-                            DFACoreLog("Q: Matching started for duties: ");
-                            for (var i = 0; i < 5; i++)
-                            {
-                                var code = BitConverter.ToUInt16(data, 22 + i * 2);
-                                Code = code;
-                                if (code == 0)
-                                    break;
-
-                                DFACoreLog($" {i}. [{code}]");
-                            }
-                        }
-                    }
-                    else if (status == 3) // Cancel
-                    {
-                        state = reason == 8 ? MatchingState.QUEUED : MatchingState.IDLE;
-                        DFACoreLog("Q: Matching Stopped");
-                    }
-                    else if (status == 6) // Entered
-                    {
-                        state = MatchingState.IDLE;
-                        DFACoreLog("Q: Entered Instance Area");
-                    }
-                    else if (status == 4) // Matched
-                    {
-                        var roulette = data[20];
-                        var code = BitConverter.ToUInt16(data, 22);
-                        Code = code;
-                        if (code == 0)
-                            return;
-
-                        state = MatchingState.MATCHED;
-                        //FireEvent(pid, EventType.MATCH_ALERT, new int[] { roulette, code });
-
-                        DFACoreLog($"Q: Matched [{roulette}] - [{code}]");
-                    }
-                }
-                else if (opcode == 0x006F)
-                {
-                    // used on standalone version to stop blink
-                }
-                else if (opcode == 0x0121)
-                {
-                    // used on standalone version to stop blink, for Global Server
-                }
-                else if (opcode == 0x0079) // Status during matching
-                {
-                    var code = BitConverter.ToUInt16(data, 0);
-                    Code = code;
-                    if (code == 0)
-                        return;
-
-                    byte status;
-                    byte tank;
-                    byte dps;
-                    byte healer;
-                    var member = 0;
-                    //var instance = _dataRepository.GetInstance(code);
-
-                    if (_netCompatibility)
-                    {
-                        status = data[8];
-                        tank = data[9];
-                        dps = data[10];
-                        healer = data[11];
-                    }
-                    else
-                    {
-                        status = data[4];
-                        tank = data[5];
-                        dps = data[6];
-                        healer = data[7];
-                    }
-
-                    if (status == 0 && tank == 0 && healer == 0 && dps == 0) // v4.5~ compatibility (data location changed, original location sends "0")
-                    {
-                        _netCompatibility = true;
-                        status = data[8];
-                        tank = data[9];
-                        dps = data[10];
-                        healer = data[11];
-                    }
-
-                    if (status == 1)
-                    {
-                        member = tank * 10000 + dps * 100 + healer;
-
-                        if (state == MatchingState.MATCHED && _lastMember != member)
-                        {
-                            // We get here when the queue is stopped by someone else (?)
-                            state = MatchingState.QUEUED;
-                        }
-                        else if (state == MatchingState.IDLE)
-                        {
-                            // Plugin started with duty finder in progress
-                            state = MatchingState.QUEUED;
-                        }
-                        else if (state == MatchingState.QUEUED)
-                        {
-                            // in queue
-                        }
-
-                        _lastMember = member;
-                    }
-                    else if (status == 2)
-                    {
-                        // info about player partecipating in the duty (?)
-                        return;
-                    }
-                    else if (status == 4)
-                    {
-                        // Duty Accepted status
-                    }
-
-                    //var memberinfo = $"{tank}/{instance.Tank}, {healer}/{instance.Healer}, {dps}/{instance.Dps} | {member}";
-                    DFACoreLog($"Q: Matching State Updated");
-                }
-                else if (opcode == 0x0080)
-                {
-                    var roulette = data[2];
-                    var code = BitConverter.ToUInt16(data, 4);
-                    Code = code;
-                    state = MatchingState.MATCHED;
-                    //FireEvent(pid, EventType.MATCH_ALERT, new int[] { roulette, code });
-
-                    DFACoreLog($"Q: Matched [{code}]");
-                }
-                #endregion
-
                 switch (opcode)
                 {
                     case 0x008F: // Duty
@@ -657,6 +487,12 @@ namespace Qitana.DFAPlugin
                         var queuedHealerMax = data[11];
                         var queuedDps = data[12];
                         var queuedDpsMax = data[13];
+
+                        if (state == MatchingState.MATCHED)
+                        {
+                            state = MatchingState.QUEUED;
+                            MatchedTank = MatchedHealer = MatchedDps = MatchedTankMax = MatchedHealerMax = MatchedDpsMax = 0;
+                        }
 
                         WaitList = waitList;
                         WaitTime = waitTime;
