@@ -48,6 +48,11 @@ body {
   padding: 10px;
 }
 
+.border {
+  height: 100%;
+  border: 2px solid #333333;
+}
+
 .inner {
   position: relative;
   padding: 10px;
