@@ -7,59 +7,59 @@
 </head>
 
 <body id="DFAStatus" v-class="resize-handle: !locked">
-
-  <!-- outer -->
-  <div class="outer {{stats.Hide ? 'hide' : ''}}">
-    <!-- innner -->
-    <div class="inner">
-      <div class="background"></div>
-      <!-- Front -->
-      <div class="front">
-        <div class="box">
-          <div class="name">
-            <span class="header">ステータス: </span>
-            <span class="value">{{stats.DutyStatus}}</span>
-            <span v-if="stats.IsQueued" class="value">( </span>
-            <span v-if="stats.IsQueued && stats.IsRoulette" class="value">{{stats.Wait.List}} 人待ち / </span>
-            <span v-if="stats.IsQueued" class="value"> 待機時間: {{stats.Wait.Time}} 分 )</span>
+  <div v-class="border: !locked">
+    <!-- outer -->
+    <div class="outer {{stats.Hide ? 'hide' : ''}}">
+      <!-- innner -->
+      <div class="inner">
+        <div class="background"></div>
+        <!-- Front -->
+        <div class="front">
+          <div class="box">
+            <div class="name">
+              <span class="header">ステータス: </span>
+              <span class="value">{{stats.DutyStatus}}</span>
+              <span v-if="stats.IsQueued" class="value">( </span>
+              <span v-if="stats.IsQueued && stats.IsRoulette" class="value">{{stats.Wait.List}} 人待ち / </span>
+              <span v-if="stats.IsQueued" class="value"> 待機時間: {{stats.Wait.Time}} 分 )</span>
+            </div>
           </div>
-        </div>
-        <div class="box">
-          <div class="name">
-            <span class="header">ルーレット: </span>
-            <span class="value">{{stats.Roulette.Name}}</span>
+          <div class="box">
+            <div class="name">
+              <span class="header">ルーレット: </span>
+              <span class="value">{{stats.Roulette.Name}}</span>
+            </div>
           </div>
-        </div>
-        <div class="box">
-          <div class="name">
-            <span class="header">ダンジョン: </span>
-            <span class="value">{{stats.Instance.Name}}</span>
+          <div class="box">
+            <div class="name">
+              <span class="header">ダンジョン: </span>
+              <span class="value">{{stats.Instance.Name}}</span>
+            </div>
           </div>
-        </div>
-        <div v-if="stats.IsQueued && !stats.IsRoulette" class="box">
-          <div class="name">
-            <span class="header">パーティ構築状況: </span>
-            <span class="value">残り:{{stats.QueuedParty.Remains}}人
-              ( Tank:{{stats.QueuedParty.Tank}}/{{stats.QueuedParty.TankMax}}
-              Healer:{{stats.QueuedParty.Healer}}/{{stats.QueuedParty.HealerMax}}
-              DPS:{{stats.QueuedParty.Dps}}/{{stats.QueuedParty.DpsMax}} )</span>
+          <div v-if="stats.IsQueued && !stats.IsRoulette" class="box">
+            <div class="name">
+              <span class="header">パーティ構築状況: </span>
+              <span class="value">残り:{{stats.QueuedParty.Remains}}人
+                ( Tank:{{stats.QueuedParty.Tank}}/{{stats.QueuedParty.TankMax}}
+                Healer:{{stats.QueuedParty.Healer}}/{{stats.QueuedParty.HealerMax}}
+                DPS:{{stats.QueuedParty.Dps}}/{{stats.QueuedParty.DpsMax}} )</span>
+            </div>
           </div>
-        </div>
-        <div v-if="stats.IsMatched" class="box">
-          <div class="name">
-            <span class="header">パーティ構築状況: </span>
-            <span class="value">残り:{{stats.MatchedParty.Remains}}人
-              ( Tank:{{stats.MatchedParty.Tank}}/{{stats.MatchedParty.TankMax}}
-              Healer:{{stats.MatchedParty.Healer}}/{{stats.MatchedParty.HealerMax}}
-              DPS:{{stats.MatchedParty.Dps}}/{{stats.MatchedParty.DpsMax}} )</span>
+          <div v-if="stats.IsMatched" class="box">
+            <div class="name">
+              <span class="header">パーティ構築状況: </span>
+              <span class="value">残り:{{stats.MatchedParty.Remains}}人
+                ( Tank:{{stats.MatchedParty.Tank}}/{{stats.MatchedParty.TankMax}}
+                Healer:{{stats.MatchedParty.Healer}}/{{stats.MatchedParty.HealerMax}}
+                DPS:{{stats.MatchedParty.Dps}}/{{stats.MatchedParty.DpsMax}} )</span>
+            </div>
           </div>
+          <!-- end of Front -->
         </div>
-        <!-- end of Front -->
+        <!-- end of inner -->
       </div>
-      <!-- end of inner -->
+      <!-- end of outer -->
     </div>
-    <!-- end of outer -->
-
     <!-- load js -->
     <script src="data/ja-jp.js"></script>
     <script src="js/vue-0.12.7.min.js"></script>
