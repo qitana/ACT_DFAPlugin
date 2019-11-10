@@ -156,11 +156,21 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="resources\DFAPlugin\data\de-de.json" />
-    <None Include="resources\DFAPlugin\data\en-us.json" />
-    <None Include="resources\DFAPlugin\data\fr-fr.json" />
-    <None Include="resources\DFAPlugin\data\ja-jp.json" />
-    <None Include="resources\DFAPlugin\data\ko-kr.json" />
+    <None Include="resources\DFAPlugin\data\de-de.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\DFAPlugin\data\en-us.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\DFAPlugin\data\fr-fr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\DFAPlugin\data\ja-jp.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="resources\DFAPlugin\data\ko-kr.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="resources\DFAPlugin\data\README.md" />
   </ItemGroup>
   <ItemGroup>
