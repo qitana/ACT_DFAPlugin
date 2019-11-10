@@ -197,4 +197,7 @@
   <data name="tableLayoutPanel7.RowCount" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
+  <data name="label_TTS.Text" xml:space="preserve">
+    <value>マッチ時のTTS</value>
+  </data>
 </root>

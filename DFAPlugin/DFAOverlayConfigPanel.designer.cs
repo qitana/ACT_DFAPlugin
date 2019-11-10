@@ -53,6 +53,8 @@
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonDFACopyActXiv = new System.Windows.Forms.Button();
             this.buttonDFAReloadBrowser = new System.Windows.Forms.Button();
+            this.label_TTS = new System.Windows.Forms.Label();
+            this.textBox_TTS = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel7.SuspendLayout();
             this.table_URL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDFAInterval)).BeginInit();
@@ -79,8 +81,10 @@
             this.tableLayoutPanel7.Controls.Add(this.table_Hotkey, 1, 5);
             this.tableLayoutPanel7.Controls.Add(this.label_Framerate, 0, 6);
             this.tableLayoutPanel7.Controls.Add(this.nudDFAMaxFrameRate, 1, 6);
-            this.tableLayoutPanel7.Controls.Add(this.label_Help, 0, 7);
-            this.tableLayoutPanel7.Controls.Add(this.panel_Buttons, 1, 8);
+            this.tableLayoutPanel7.Controls.Add(this.label_Help, 0, 8);
+            this.tableLayoutPanel7.Controls.Add(this.panel_Buttons, 1, 9);
+            this.tableLayoutPanel7.Controls.Add(this.label_TTS, 0, 7);
+            this.tableLayoutPanel7.Controls.Add(this.textBox_TTS, 1, 7);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             // 
             // label_ShowOverlay
@@ -163,7 +167,7 @@
             0,
             0});
             this.nudDFAInterval.Minimum = new decimal(new int[] {
-            500,
+            100,
             0,
             0,
             0});
@@ -259,6 +263,17 @@
             this.buttonDFAReloadBrowser.UseVisualStyleBackColor = true;
             this.buttonDFAReloadBrowser.Click += new System.EventHandler(this.buttonDFAReloadBrowser_Click);
             // 
+            // label_TTS
+            // 
+            resources.ApplyResources(this.label_TTS, "label_TTS");
+            this.label_TTS.Name = "label_TTS";
+            // 
+            // textBox_TTS
+            // 
+            resources.ApplyResources(this.textBox_TTS, "textBox_TTS");
+            this.textBox_TTS.Name = "textBox_TTS";
+            this.textBox_TTS.TextChanged += new System.EventHandler(this.textBox_TTS_TextChanged);
+            // 
             // DFAOverlayConfigPanel
             // 
             resources.ApplyResources(this, "$this");
@@ -306,5 +321,7 @@
         private System.Windows.Forms.TableLayoutPanel table_Hotkey;
         private System.Windows.Forms.Label label_LockOverlay;
         private System.Windows.Forms.CheckBox checkDFALock;
+        private System.Windows.Forms.Label label_TTS;
+        private System.Windows.Forms.TextBox textBox_TTS;
     }
 }
