@@ -14,6 +14,7 @@ namespace Qitana.DFAPlugin
         {
             this._Interval = 1000;
             this.Url = new Uri(System.IO.Path.Combine(OverlayAddonMain.ResourcesDirectory, @"DFAPlugin\DFAStatus.html")).ToString();
+            this._TTS = @"{instance.ja_jp} にマッチしました";
         }
 
         private DFAOverlayConfig()
@@ -37,6 +38,23 @@ namespace Qitana.DFAPlugin
                 {
                     this._Interval = value;
                     IntervalChanged?.Invoke(this, new IntervalChangedEventArgs(this._Interval));
+                }
+            }
+        }
+
+        private string _TTS;
+        [XmlElement("TTS")]
+        public string TTS
+        {
+            get
+            {
+                return this._TTS;
+            }
+            set
+            {
+                if (this._TTS != value)
+                {
+                    this._TTS = value;
                 }
             }
         }

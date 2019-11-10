@@ -106,10 +106,13 @@ var DFAStatus = new Vue({
       this.stats.Roulette.Code = e.detail.DFAData.RouletteCode;
       if (Number(e.detail.DFAData.RouletteCode) > 0) {
         this.stats.IsRoulette = true;
+        this.stats.Roulette.Name = e.detail.DFAData.RouletteName.ja_jp;
+        /*
         this.stats.Roulette.Name = dic.roulettes[e.detail.DFAData.RouletteCode];
         if (!this.stats.Roulette.Name) {
           this.stats.Roulette.Name = 'Unknown Roulette (' + e.detail.DFAData.RouletteCode + ')';
         }
+        */
       } else {
         this.stats.IsRoulette = false;
         this.stats.Roulette.Name = '';
@@ -117,10 +120,13 @@ var DFAStatus = new Vue({
 
       this.stats.Instance.Code = e.detail.DFAData.Code;
       if (Number(e.detail.DFAData.Code) > 0) {
+        this.stats.Instance.Name = e.detail.DFAData.Name.ja_jp;
+        /*
         this.stats.Instance.Name = dic.instances[e.detail.DFAData.Code].name;
         if (!this.stats.Instance.Name) {
           this.stats.Instance.Name = 'Unknown Instance (' + e.detail.DFAData.Code + ')';
         }
+        */
       } else {
         this.stats.Instance.Name = '';
       }

@@ -66,6 +66,7 @@ namespace Qitana.DFAPlugin
                 if (this.DFACore == null)
                 {
                     DFACore = new DFACore();
+                    DFACore.TTS = this.Config.TTS;
                     return;
                 }
 
@@ -112,7 +113,9 @@ namespace Qitana.DFAPlugin
             {
                 DFAResultsObject.State = this.DFACore.State;
                 DFAResultsObject.RouletteCode = this.DFACore.RouletteCode;
+                DFAResultsObject.RouletteName = this.DFACore.RouletteName;
                 DFAResultsObject.Code = this.DFACore.Code;
+                DFAResultsObject.Name = this.DFACore.Name;
                 DFAResultsObject.WaitList = this.DFACore.WaitList;
                 DFAResultsObject.WaitTime = this.DFACore.WaitTime;
                 DFAResultsObject.QueuedPartyStatus = new DFAResultsObject.PartyStatus()
@@ -144,6 +147,14 @@ namespace Qitana.DFAPlugin
         private string CreateEventDispatcherScript()
             => "var ActXiv = { 'DFAData': " + this.CreateJsonData() + " };\n" +
                "document.dispatchEvent(new CustomEvent('onOverlayDataUpdate', { detail: ActXiv }));";
+
+        internal void UpdateTTS()
+        {
+            if (this.DFACore != null && this.DFACore.IsActive)
+            {
+                this.DFACore.TTS = this.Config.TTS;
+            }
+        }
 
         /// <summary>
         /// スキャン間隔を更新する
@@ -188,11 +199,13 @@ namespace Qitana.DFAPlugin
         protected override void InitializeTimer() => base.InitializeTimer();
 
         //// JSON用オブジェクト
-        private class DFAResultsObject
+        internal class DFAResultsObject
         {
             public string State { get; set; }
             public int RouletteCode { get; set; }
+            public DFADataModel.Names RouletteName { get; set; }
             public int Code { get; set; }
+            public DFADataModel.Names Name { get; set; }
             public uint WaitList { get; set; }
             public uint WaitTime { get; set; }
 
