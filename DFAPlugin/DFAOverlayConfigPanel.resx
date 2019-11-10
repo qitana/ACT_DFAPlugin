@@ -718,13 +718,13 @@
     <value>NoControl</value>
   </data>
   <data name="label_Help.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 167</value>
+    <value>6, 189</value>
   </data>
   <data name="label_Help.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 10, 3, 0</value>
   </data>
   <data name="label_Help.Size" type="System.Drawing.Size, System.Drawing">
-    <value>590, 185</value>
+    <value>590, 163</value>
   </data>
   <data name="label_Help.TabIndex" type="System.Int32, mscorlib">
     <value>99</value>
@@ -863,6 +863,63 @@
   <data name="&gt;&gt;panel_Buttons.ZOrder" xml:space="preserve">
     <value>15</value>
   </data>
+  <data name="label_TTS.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label_TTS.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="label_TTS.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 157</value>
+  </data>
+  <data name="label_TTS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 22</value>
+  </data>
+  <data name="label_TTS.TabIndex" type="System.Int32, mscorlib">
+    <value>100</value>
+  </data>
+  <data name="label_TTS.Text" xml:space="preserve">
+    <value>TTS on Matched</value>
+  </data>
+  <data name="label_TTS.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label_TTS.Name" xml:space="preserve">
+    <value>label_TTS</value>
+  </data>
+  <data name="&gt;&gt;label_TTS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_TTS.Parent" xml:space="preserve">
+    <value>tableLayoutPanel7</value>
+  </data>
+  <data name="&gt;&gt;label_TTS.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="textBox_TTS.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="textBox_TTS.Location" type="System.Drawing.Point, System.Drawing">
+    <value>161, 160</value>
+  </data>
+  <data name="textBox_TTS.Size" type="System.Drawing.Size, System.Drawing">
+    <value>435, 19</value>
+  </data>
+  <data name="textBox_TTS.TabIndex" type="System.Int32, mscorlib">
+    <value>101</value>
+  </data>
+  <data name="&gt;&gt;textBox_TTS.Name" xml:space="preserve">
+    <value>textBox_TTS</value>
+  </data>
+  <data name="&gt;&gt;textBox_TTS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox_TTS.Parent" xml:space="preserve">
+    <value>tableLayoutPanel7</value>
+  </data>
+  <data name="&gt;&gt;textBox_TTS.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
   <data name="tableLayoutPanel7.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -873,7 +930,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tableLayoutPanel7.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tableLayoutPanel7.Size" type="System.Drawing.Size, System.Drawing">
     <value>602, 412</value>
@@ -894,7 +951,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel7.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_ShowOverlay" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkDFAVisible" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Clickthru" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkDFAClickThru" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_LockOverlay" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkDFALock" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_URL" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="table_URL" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_DFAInterval" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudDFAInterval" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Hotkey" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="table_Hotkey" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Framerate" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudDFAMaxFrameRate" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Help" Row="7" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="panel_Buttons" Row="8" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,155,Percent,100" /&gt;&lt;Rows Styles="Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Percent,100,Absolute,57,Absolute,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_ShowOverlay" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkDFAVisible" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Clickthru" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkDFAClickThru" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_LockOverlay" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="checkDFALock" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_URL" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="table_URL" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_DFAInterval" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudDFAInterval" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Hotkey" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="table_Hotkey" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Framerate" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudDFAMaxFrameRate" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_Help" Row="8" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="panel_Buttons" Row="9" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_TTS" Row="7" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_TTS" Row="7" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,155,Percent,100" /&gt;&lt;Rows Styles="Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Absolute,22,Percent,100,Absolute,57" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

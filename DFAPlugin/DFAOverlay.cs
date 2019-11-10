@@ -66,6 +66,7 @@ namespace Qitana.DFAPlugin
                 if (this.DFACore == null)
                 {
                     DFACore = new DFACore();
+                    DFACore.TTS = this.Config.TTS;
                     return;
                 }
 
@@ -144,6 +145,14 @@ namespace Qitana.DFAPlugin
         private string CreateEventDispatcherScript()
             => "var ActXiv = { 'DFAData': " + this.CreateJsonData() + " };\n" +
                "document.dispatchEvent(new CustomEvent('onOverlayDataUpdate', { detail: ActXiv }));";
+
+        internal void UpdateTTS()
+        {
+            if (this.DFACore != null && this.DFACore.IsActive)
+            {
+                this.DFACore.TTS = this.Config.TTS;
+            }
+        }
 
         /// <summary>
         /// スキャン間隔を更新する
