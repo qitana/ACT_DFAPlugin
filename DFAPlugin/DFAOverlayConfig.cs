@@ -14,7 +14,7 @@ namespace Qitana.DFAPlugin
         {
             this._Interval = 1000;
             this.Url = new Uri(System.IO.Path.Combine(OverlayAddonMain.ResourcesDirectory, @"DFAPlugin\DFAStatus.html")).ToString();
-            this._TTS = string.Empty;
+            this._TTS = @"{instance.ja_jp} にマッチしました";
         }
 
         private DFAOverlayConfig()

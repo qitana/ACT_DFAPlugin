@@ -21,6 +21,9 @@ using Machina.FFXIV;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Dynamic;
 
 namespace Qitana.DFAPlugin
 {
@@ -33,18 +36,29 @@ namespace Qitana.DFAPlugin
         private TCPNetworkMonitor tcpNetworkMonitor;
         private FFXIVNetworkMonitor ffxivNetworkMonitor;
 
+        private Dictionary<string, DFADataModel> dfaData = new Dictionary<string, DFADataModel>();
+        private Dictionary<string, string> jsonFiles = new Dictionary<string, string>()
+        {
+            { "ja_jp", "ja-jp.json" },
+            { "en_us", "en-us.json" },
+            { "de_De", "de-de.json" },
+            { "fr_fr", "fr-fr.json" },
+            { "ko_kr", "ko-kr.json" },
+        };
+
         private FFXIVNetworkMonitor.MessageReceivedDelegate messageReceivedDelegate;
         private TCPNetworkMonitor.DataReceivedDelegate dataRecievedDelegate; // 使わない
 
         private MatchingState _state = MatchingState.IDLE;
-
         public string TTS { get; set; } = string.Empty;
 
         private bool IsProcessChanged { get; set; } = false;
         public bool IsActive => true;
         public string State => this._state.ToString();
         public int RouletteCode { get; private set; } = 0;
+        public DFADataModel.Names RouletteName => this.GetRouletteNames(this.RouletteCode);
         public int Code { get; private set; } = 0;
+        public DFADataModel.Names Name => this.GetInstanceNames(this.Code);
         public uint WaitTime { get; private set; } = 0;
         public uint WaitList { get; private set; } = 0;
 
@@ -65,9 +79,9 @@ namespace Qitana.DFAPlugin
 
         public DFACore()
         {
+            LoadJsonFiles();
             this.messageReceivedDelegate = new FFXIVNetworkMonitor.MessageReceivedDelegate(MessageReceived);
             this.dataRecievedDelegate = new TCPNetworkMonitor.DataReceivedDelegate(DataRecieved);　// 使わない
-            Start();
         }
 
         public void Dispose()
@@ -75,9 +89,55 @@ namespace Qitana.DFAPlugin
             Stop();
         }
 
-        public void Start()
+        public void LoadJsonFiles()
         {
-            DFACoreLog(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            try
+            {
+                var dllPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var dfaDataDirectroy = Path.Combine(Directory.GetParent(Path.GetDirectoryName(dllPath)).FullName, "resources", "DFAPlugin", "data");
+                if (Directory.Exists(dfaDataDirectroy))
+                {
+                    DFACoreLog("Load JSON Files From: " + dfaDataDirectroy);
+
+                    foreach (var jsonFile in jsonFiles)
+                    {
+                        var jsonFilePath = Path.Combine(dfaDataDirectroy, jsonFile.Value);
+                        if (File.Exists(jsonFilePath))
+                        {
+                            try
+                            {
+                                //dynamic data = JObject.Parse(File.ReadAllText(jsonFilePath));
+                                DFADataModel data = JsonConvert.DeserializeObject<DFADataModel>(File.ReadAllText(jsonFilePath));
+                                dfaData.Add(jsonFile.Key, data);
+                            }
+                            catch (Exception ex)
+                            {
+                                DFACoreLog("Failed to Load File: " + jsonFilePath + " : " + ex.Message.ToString());
+                            }
+                            finally
+                            {
+                                if (!dfaData.ContainsKey(jsonFile.Key))
+                                {
+                                    dfaData.Add(jsonFile.Key, null);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            DFACoreLog("File Not Found: " + jsonFilePath);
+                        }
+
+                    }
+                }
+                else
+                {
+                    DFACoreLog("Directory Not Found: " + dfaDataDirectroy);
+                }
+            }
+            catch (Exception ex)
+            {
+                DFACoreLog("Exception on Load(): " + ex.Message.ToString());
+            }
         }
 
         public void Stop()
@@ -376,14 +436,15 @@ namespace Qitana.DFAPlugin
                     opcode != 0x009A &&
                     opcode != 0x0304 &&
                     opcode != 0x00AE &&
-                    opcode != 0x0257
+                    opcode != 0x0257 &&
+                    opcode != 0x0002
                     )
                     return;
 #endif
 
 #if DEBUG
                 // opcodeが変わったと思われる場合はここを全部作り直し
-                // 宿屋で何もしなくても出るものをブロック。
+                // 宿屋で何もしなくても出るものをブロック。平時でも出るものは使えない。
                 if (
                     opcode == 0x022F ||
                     opcode == 0x0264 ||
@@ -462,7 +523,10 @@ namespace Qitana.DFAPlugin
                         state = MatchingState.MATCHED;
                         if (!string.IsNullOrWhiteSpace(TTS))
                         {
-                            ActGlobals.oFormActMain.TTS(TTS);
+                            DFACoreLog("TTS RawString   : " + TTS);
+                            var ttsString = ReplaceTtsVars(TTS, RouletteCode, Code);
+                            DFACoreLog("TTS SpeachString: " + ttsString);
+                            ActGlobals.oFormActMain.TTS(ttsString);
                         }
                         DFACoreLog($"Q: Matched [{matched_roulette}/{matched_code}]");
                         break;
@@ -540,6 +604,13 @@ namespace Qitana.DFAPlugin
                         }
                         break;
 
+                    case 0x0002: // matching complete flag?
+                        if (state == MatchingState.MATCHED)
+                        {
+                            state = MatchingState.IDLE;
+                        }
+                        break;
+
                     default:
                         break;
                 }
@@ -554,6 +625,116 @@ namespace Qitana.DFAPlugin
             IDLE = 0,
             QUEUED = 1,
             MATCHED = 2,
+        }
+
+        private string ReplaceTtsVars(string text, int rouletteCode, int instanceCode)
+        {
+
+            try
+            {
+                if (text.Contains(@"{roulette.ja_jp}")) text = text.Replace(@"{roulette.ja_jp}", GetRouletteName("ja_jp", rouletteCode));
+                if (text.Contains(@"{roulette.en_us}")) text = text.Replace(@"{roulette.en_us}", GetRouletteName("en_us", rouletteCode));
+                if (text.Contains(@"{roulette.de_de}")) text = text.Replace(@"{roulette.de_de}", GetRouletteName("de_de", rouletteCode));
+                if (text.Contains(@"{roulette.fr_fr}")) text = text.Replace(@"{roulette.fr_fr}", GetRouletteName("fr_fr", rouletteCode));
+                if (text.Contains(@"{roulette.ko_kr}")) text = text.Replace(@"{roulette.ko_kr}", GetRouletteName("ko_kr", rouletteCode));
+
+                if (text.Contains(@"{instance.ja_jp}")) text = text.Replace(@"{instance.ja_jp}", GetInstanceName("ja_jp", instanceCode));
+                if (text.Contains(@"{instance.en_us}")) text = text.Replace(@"{instance.en_us}", GetInstanceName("en_us", instanceCode));
+                if (text.Contains(@"{instance.de_de}")) text = text.Replace(@"{instance.de_de}", GetInstanceName("de_de", instanceCode));
+                if (text.Contains(@"{instance.fr_fr}")) text = text.Replace(@"{instance.fr_fr}", GetInstanceName("fr_fr", instanceCode));
+                if (text.Contains(@"{instance.ko_kr}")) text = text.Replace(@"{instance.ko_kr}", GetInstanceName("ko_kr", instanceCode));
+            }
+            catch (Exception ex)
+            {
+                DFACoreLog("ReplaceTtsVars Error: " + ex.Message);
+            }
+
+            return text;
+        }
+
+        public DFADataModel.Names GetRouletteNames(int rouletteCode)
+        {
+            if(rouletteCode == 0)
+            {
+                return new DFADataModel.Names()
+                {
+                    ja_jp = string.Empty,
+                    en_us = string.Empty,
+                    de_de = string.Empty,
+                    fr_fr = string.Empty,
+                    ko_kr = string.Empty,
+                };
+            }
+
+            return new DFADataModel.Names()
+            {
+                ja_jp = GetRouletteName("ja_jp", rouletteCode),
+                en_us = GetRouletteName("en_us", rouletteCode),
+                de_de = GetRouletteName("de_de", rouletteCode),
+                fr_fr = GetRouletteName("fr_fr", rouletteCode),
+                ko_kr = GetRouletteName("ko_kr", rouletteCode),
+            };
+        }
+
+        private string GetRouletteName(string locale, int rouletteCode)
+        {
+            if (!this.dfaData.ContainsKey(locale))
+            {
+                return "Unknown Roulette";
+            }
+
+            if (this.dfaData[locale].roulettes == null ||
+                !this.dfaData[locale].roulettes.ContainsKey(rouletteCode.ToString()))
+            {
+                return "Unknown Roulette";
+            }
+
+            return this.dfaData[locale].roulettes[rouletteCode.ToString()];
+        }
+
+        public DFADataModel.Names GetInstanceNames(int instanceCode)
+        {
+            if (instanceCode == 0)
+            {
+                return new DFADataModel.Names()
+                {
+                    ja_jp = string.Empty,
+                    en_us = string.Empty,
+                    de_de = string.Empty,
+                    fr_fr = string.Empty,
+                    ko_kr = string.Empty,
+                };
+            }
+
+            return new DFADataModel.Names()
+            {
+                ja_jp = GetInstanceName("ja_jp", instanceCode),
+                en_us = GetInstanceName("en_us", instanceCode),
+                de_de = GetInstanceName("de_de", instanceCode),
+                fr_fr = GetInstanceName("fr_fr", instanceCode),
+                ko_kr = GetInstanceName("ko_kr", instanceCode),
+            };
+        }
+
+        private string GetInstanceName(string locale, int instanceCode)
+        {
+            if (!this.dfaData.ContainsKey(locale))
+            { 
+                return "Unknown Locale"; 
+            }
+
+            if (this.dfaData[locale].instances == null || 
+                !this.dfaData[locale].instances.ContainsKey(instanceCode.ToString()))
+            {
+                return "Unknown Instance (" + instanceCode.ToString() + ")";
+            }
+
+            if(this.dfaData[locale].instances[instanceCode.ToString()] == null)
+            {
+                return "Unknown Instance (" + instanceCode.ToString() + ")";
+            }
+
+            return this.dfaData[locale].instances[instanceCode.ToString()].name;
         }
 
         #region Log
