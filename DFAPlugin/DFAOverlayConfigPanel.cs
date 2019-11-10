@@ -41,6 +41,7 @@ namespace Qitana.DFAPlugin
             this.checkDFAEnableGlobalHotkey.Checked = this.config.GlobalHotkeyEnabled;
             this.textDFAGlobalHotkey.Enabled = this.checkDFAEnableGlobalHotkey.Checked;
             this.textDFAGlobalHotkey.Text = GetHotkeyString(this.config.GlobalHotkeyModifiers, this.config.GlobalHotkey);
+            this.textBox_TTS.Text = this.config.TTS;
         }
 
         private void SetupConfigEventHandlers()
@@ -188,6 +189,15 @@ namespace Qitana.DFAPlugin
             if (this.overlay != null)
             {
                 this.overlay.UpdateScanInterval();
+            }
+        }
+        
+        private void textBox_TTS_TextChanged(object sender, EventArgs e)
+        {
+            this.config.TTS = this.textBox_TTS.Text;
+            if (this.overlay != null)
+            {
+                this.overlay.UpdateTTS();
             }
         }
 

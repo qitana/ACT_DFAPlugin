@@ -38,6 +38,8 @@ namespace Qitana.DFAPlugin
 
         private MatchingState _state = MatchingState.IDLE;
 
+        public string TTS { get; set; } = string.Empty;
+
         private bool IsProcessChanged { get; set; } = false;
         public bool IsActive => true;
         public string State => this._state.ToString();
@@ -75,6 +77,7 @@ namespace Qitana.DFAPlugin
 
         public void Start()
         {
+            DFACoreLog(System.Reflection.Assembly.GetExecutingAssembly().Location);
         }
 
         public void Stop()
@@ -457,6 +460,10 @@ namespace Qitana.DFAPlugin
                         RouletteCode = matched_roulette;
                         Code = matched_code;
                         state = MatchingState.MATCHED;
+                        if (!string.IsNullOrWhiteSpace(TTS))
+                        {
+                            ActGlobals.oFormActMain.TTS(TTS);
+                        }
                         DFACoreLog($"Q: Matched [{matched_roulette}/{matched_code}]");
                         break;
 
