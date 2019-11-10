@@ -203,6 +203,9 @@
     <Content Include="resources\DFAPlugin\DFAStatus.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\DFAPlugin\DFAStatusSimple.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\DFAPlugin\js\debug.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
