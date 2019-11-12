@@ -256,7 +256,7 @@ namespace Qitana.DFAPlugin
 
                                                         if (tcpMonitor != null)
                                                         {
-                                                            //Machina によるTCPのペイロードデータを使う場合はこのポイント
+                                                            // Machina によるTCPのペイロードデータを使う場合はこのポイント
                                                             this.tcpNetworkMonitor = (TCPNetworkMonitor)tcpMonitor;
                                                             //tcpNetworkMonitor.DataReceived -= this.dataRecievedDelegate;
                                                             //tcpNetworkMonitor.DataReceived += this.dataRecievedDelegate;
@@ -431,12 +431,12 @@ namespace Qitana.DFAPlugin
 #if !DEBUG
                 // 本番用。使うものだけ入れる
                 if (
-                    opcode != 0x008F &&
-                    opcode != 0x00B3 &&
-                    opcode != 0x009A &&
-                    opcode != 0x0304 &&
-                    opcode != 0x00AE &&
-                    opcode != 0x0257 &&
+                    opcode != 0x0164 &&
+                    opcode != 0x032D &&
+                    opcode != 0x03CF &&
+                    opcode != 0x02A8 &&
+                    opcode != 0x032F &&
+                    opcode != 0x1008 &&
                     opcode != 0x0002
                     )
                     return;
@@ -444,12 +444,18 @@ namespace Qitana.DFAPlugin
 
 #if DEBUG
                 // opcodeが変わったと思われる場合はここを全部作り直し
-                // 宿屋で何もしなくても出るものをブロック。平時でも出るものは使えない。
+                // ハウス等で何もしなくても出るものをブロック。平時でも出るものは使えない。
                 if (
-                    opcode == 0x022F ||
-                    opcode == 0x0264 ||
-                    opcode == 0x0346 ||
-                    opcode == 0x00C7 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x012D ||
+                    opcode == 0x00EB ||
+                    opcode == 0x026A ||
+                    opcode == 0x03C5 ||
+                    opcode == 0x0065 ||
+                    opcode == 0x031D ||
+                    opcode == 0x0159 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0000 ||
                     opcode == 0x0000 ||
                     opcode == 0x0000 ||
                     opcode == 0x0000
@@ -459,23 +465,28 @@ namespace Qitana.DFAPlugin
                 // opcodeが変わったと思われる場合はここを全部作り直し
                 // CF関連で出るものを列挙。ここに入れればログにByte列が出力される。
                 if (
-                    opcode == 0x035A ||
-                    opcode == 0x008F ||
-                    opcode == 0x009A ||
-                    opcode == 0x00B3 ||
-                    opcode == 0x01C7 ||
-                    opcode == 0x00AE ||
-                    opcode == 0x0257 ||
-                    opcode == 0x1019 ||
-                    opcode == 0x0002 ||
-                    opcode == 0x03D2 ||
-                    opcode == 0x0304 ||
+                    opcode == 0x0000 ||
+                    opcode == 0x0164 ||
+                    opcode == 0x03CF ||
+                    opcode == 0x02A8 ||
+                    opcode == 0x017C ||
+                    opcode == 0x008D ||
                     opcode == 0x02D6 ||
-                    opcode == 0x0000 ||
-                    opcode == 0x0000 ||
+                    opcode == 0x033C ||
+                    opcode == 0x03CF ||
+                    opcode == 0x02A3 ||
+                    opcode == 0x032D ||
+                    opcode == 0x0347 ||
+                    opcode == 0x032F ||
+                    opcode == 0x00D7 ||
+                    opcode == 0x0339 ||
+                    opcode == 0x1008 ||
+                    opcode == 0x0002 ||
+                    opcode == 0x0198 ||
                     opcode == 0x0000 ||
                     opcode == 0x0000
                     )
+
                 {
                     var d = message.Skip(32).Take(32).ToArray();
                     DFACoreLog($"Opcode: [{opcode.ToString("X4")}] {BitConverter.ToString(d)}");
@@ -483,6 +494,7 @@ namespace Qitana.DFAPlugin
                 else
                 {
                     // opcodeが変わったと思われる場合、Opcodeを出力して全部確認する
+                    // 以下のコメントアウトを外して確認する。
                     //DFACoreLog($"Opcode: [{opcode.ToString("X4")}]");
                     return;
                 }
@@ -491,7 +503,7 @@ namespace Qitana.DFAPlugin
                 var data = message.Skip(32).ToArray();
                 switch (opcode)
                 {
-                    case 0x008F: // Duty
+                    case 0x0164: // Duty 5.11
                         var duty_roulette = BitConverter.ToUInt16(data, 8);
                         var duty_code = BitConverter.ToUInt16(data, 12);
 
@@ -515,7 +527,7 @@ namespace Qitana.DFAPlugin
                         DFACoreLog($"Q: QUEUED [{duty_roulette}/{duty_code}]");
                         break;
 
-                    case 0x00B3: // Matched
+                    case 0x032D: // Matched 5.11
                         var matched_roulette = BitConverter.ToUInt16(data, 2);
                         var matched_code = BitConverter.ToUInt16(data, 20);
                         RouletteCode = matched_roulette;
@@ -531,7 +543,7 @@ namespace Qitana.DFAPlugin
                         DFACoreLog($"Q: Matched [{matched_roulette}/{matched_code}]");
                         break;
 
-                    case 0x009A: // operation??
+                    case 0x03CF: // operation? 5.11
                         switch (data[0])
                         {
                             case 0x73: // canceled (by me?)
@@ -549,7 +561,7 @@ namespace Qitana.DFAPlugin
                         }
                         break;
 
-                    case 0x0304: // wait queue update
+                    case 0x02A8: // wait queue update 5.11
                         var waitList = data[6];
                         var waitTime = data[7];
                         var queuedTank = data[8];
@@ -577,7 +589,7 @@ namespace Qitana.DFAPlugin
                         DFACoreLog($"Q: waitList:{waitList} waitTime:{waitTime} tank:{queuedTank}/{queuedTankMax} healer:{queuedHealer}/{queuedHealerMax} dps:{queuedDps}/{queuedDpsMax}");
                         break;
 
-                    case 0x00AE: // party update after matched
+                    case 0x032F: // party update after matched 5.11
                         var matchedTank = data[12];
                         var matchedTankMax = data[13];
                         var matchedHealer = data[14];
@@ -595,13 +607,17 @@ namespace Qitana.DFAPlugin
                         DFACoreLog($"M: tank:{matchedTank}/{matchedTankMax} healer:{matchedHealer}/{matchedHealerMax} dps:{matchedDps}/{matchedDpsMax}");
                         break;
 
-                    case 0x0257: // area change
+                    case 0x1008: // area change 5.11
+                        var area_code = BitConverter.ToUInt16(data, 4);
+
                         if (state == MatchingState.MATCHED)
                         {
                             state = MatchingState.IDLE;
-                            var area_code = BitConverter.ToUInt16(data, 4);
                             DFACoreLog($"I: Entered Area [{area_code}]");
                         }
+#if DEBUG
+                        DFACoreLog($"Entered Area [{area_code}]");
+#endif
                         break;
 
                     case 0x0002: // matching complete flag?
