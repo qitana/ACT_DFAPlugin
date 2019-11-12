@@ -436,7 +436,7 @@ namespace Qitana.DFAPlugin
                     opcode != 0x03CF &&
                     opcode != 0x02A8 &&
                     opcode != 0x032F &&
-                    opcode != 0x1008 &&
+                    opcode != 0x0339 &&
                     opcode != 0x0002
                     )
                     return;
@@ -607,7 +607,7 @@ namespace Qitana.DFAPlugin
                         DFACoreLog($"M: tank:{matchedTank}/{matchedTankMax} healer:{matchedHealer}/{matchedHealerMax} dps:{matchedDps}/{matchedDpsMax}");
                         break;
 
-                    case 0x1008: // area change 5.11
+                    case 0x0339: // area change 5.11
                         var area_code = BitConverter.ToUInt16(data, 4);
 
                         if (state == MatchingState.MATCHED)
