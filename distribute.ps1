@@ -2,11 +2,11 @@
 ./build.bat
 
 # バージョン取得
-$version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo("Build\addons\DFAOverlay.dll").FileVersion
+$version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo(".\DFAPlugin\bin\Release\DFAPlugin.dll").FileVersion
 
 # フォルダ名
-$buildFolder = ".\Build"
-$fullFolder = ".\Distribute\DFAOverlay-" + $version
+$buildFolder = ".\DFAPlugin\bin\Release"
+$fullFolder = ".\Distribute\DFAPlugin-" + $version
 
 # フォルダが既に存在するなら消去
 if ( Test-Path $fullFolder -PathType Container ) {
@@ -20,7 +20,7 @@ New-Item -ItemType directory -Path $fullFolder
 xcopy /Y /R /S /EXCLUDE:full.exclude "$buildFolder\*" "$fullFolder"
 
 cd Distribute
-$folder = "DFAOverlay-" + $version
+$folder = "DFAPlugin-" + $version
 
 # アーカイブ
 & "C:\Program Files\7-Zip\7z.exe" "a" "$folder.7z" "$folder"

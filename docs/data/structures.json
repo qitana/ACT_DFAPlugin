@@ -1,0 +1,56 @@
+[
+  {
+    "Name": "DutyAccepted",
+    "Opcode": 582,
+    "Offset": {
+      "RouletteCode": 8,
+      "DungeonCode": 12
+    }
+  },
+  {
+    "Name": "Matched",
+    "Opcode": 688,
+    "Offset": {
+      "RouletteCode": 2,
+      "DungeonCode": 20
+    }
+  },
+  {
+    "Name": "Canceled",
+    "Opcode": 972,
+    "Opcode2": 115,
+    "Offset": {
+      "Opcode2": 0
+    }
+  },
+  {
+    "Name": "WaitQueue",
+    "Opcode": 578,
+    "Offset": {
+      "WaitList": 6,
+      "WaitTime": 7,
+      "Tank": 8,
+      "TankMax": 9,
+      "Healer": 10,
+      "HealerMax": 11,
+      "Dps": 12,
+      "DpsMax": 13
+    }
+  },
+  {
+    "Name": "PartyUpdate",
+    "Opcode": 204,
+    "Offset": {
+      "Tank": 12,
+      "TankMax": 13,
+      "Healer": 14,
+      "HealerMax": 15,
+      "Dps": 16,
+      "DpsMax": 17
+    }
+  },
+  {
+    "Name": "Completed",
+    "Opcode": 0
+  }
+]

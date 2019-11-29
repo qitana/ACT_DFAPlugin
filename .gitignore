@@ -4,6 +4,7 @@ Thirdparty/OverlayPlugin/*.exe
 Thirdparty/OverlayPlugin/*.dll
 Thirdparty/FFXIV_ACT_Plugin/*.exe
 Thirdparty/FFXIV_ACT_Plugin/*.dll
+SaintCoinachData/exd-all
 Build/
 Distribute/*
 
