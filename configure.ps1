@@ -75,7 +75,7 @@ if (!(Test-Path ".\ThirdParty\ACT\Advanced Combat Tracker.exe")) {
 }
 
 # OverlayPlugin
-if ((!(Test-Path ".\ThirdParty\OverlayPlugin\FFXIV_ACT_Plugin.dll")) -or
+if ((!(Test-Path ".\ThirdParty\OverlayPlugin\OverlayPlugin.Common.dll")) -or
     (!(Test-Path ".\ThirdParty\OverlayPlugin\OverlayPlugin.Core.dll"))) {
         Write-Output ""
         Write-Output "-----------------------------------------------------------------------"
