@@ -74,18 +74,34 @@ if (!(Test-Path ".\ThirdParty\ACT\Advanced Combat Tracker.exe")) {
     Write-Output "完了."
 }
 
+# OverlayPlugin
+if ((!(Test-Path ".\ThirdParty\OverlayPlugin\OverlayPlugin.Common.dll")) -or
+    (!(Test-Path ".\ThirdParty\OverlayPlugin\OverlayPlugin.Core.dll"))) {
+        Write-Output ""
+        Write-Output "-----------------------------------------------------------------------"
+        Write-Output "OverlayPlugin をダウンロードしています..."
+    
+    $overlayPluginRepo = "ngld/OverlayPlugin"
+    $overlayPluginLatest = "https://api.github.com/repos/$overlayPluginRepo/releases"
+    $overlayPlugin_download_url = (Invoke-WebRequest -Uri $overlayPluginLatest -UseBasicParsing | ConvertFrom-Json)[0].assets[0].browser_download_url
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    if ($overlayPlugin_download_url.Length -gt 1) {
+        $overlayPluginArchiveFileName = [System.IO.Path]::GetFileName($overlayPlugin_download_url)
+        $overlayPluginArchiveFile = Join-Path $TempFolder $overlayPluginArchiveFileName
+        Invoke-WebRequest -Uri $overlayPlugin_download_url -OutFile $overlayPluginArchiveFile
+        & $7z e -y -o".\Thirdparty\OverlayPlugin\" -ir!"OverlayPlugin.Common.dll" $overlayPluginArchiveFile
+        & $7z e -y -o".\Thirdparty\OverlayPlugin\" -ir!"OverlayPlugin.Core.dll" $overlayPluginArchiveFile
+    }
+    else {
+        Write-Output ("エラー: 最新リリースの取得に失敗しました")
+        EndConfigure
+    }
+    Write-Output "完了."
+}
+
 # FFXIV_ACT_Plugin SDK
 if ((!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Common.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Config.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.LogFile.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Memory.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Network.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Overlay.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Parse.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Resource.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\Machina.dll")) -or
-(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\Machina.FFXIV.dll"))) {
+(!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Common.dll"))) {
     Write-Output ""
     Write-Output "-----------------------------------------------------------------------"
     Write-Output "FFXIV_ACT_Plugin SDK をダウンロードしています..."
@@ -117,15 +133,6 @@ if ((!(Test-Path ".\ThirdParty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.dll")) -or
         Copy-Item $ffxivActPluginDllFile ".\Thirdparty\FFXIV_ACT_Plugin\"
 
         [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.common.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Common.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.config.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Config.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.logfile.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.LogFile.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.memory.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Memory.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.network.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Network.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.overlay.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Overlay.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.parse.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Parse.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.ffxiv_act_plugin.resource.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\FFXIV_ACT_Plugin.Resource.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.machina.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\Machina.dll"))
-        [ACT.Hojoring.ATDExtractor.CosturaDecompress]::DecompressFile((Join-Path $ffxivActPluginExtractDir "costura.machina.ffxiv.dll.compressed"), (Join-Path $cd ".\Thirdparty\FFXIV_ACT_Plugin\Machina.FFXIV.dll"))
     }
     else {
         Write-Output ("エラー: 最新リリースの取得に失敗しました")
