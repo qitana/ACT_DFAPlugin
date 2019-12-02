@@ -34,6 +34,7 @@ namespace Qitana.DFAPlugin
         private void SetupControlProperties()
         {
             this.textBox_StructuresURL.Text = config.StructuresURL;
+            this.textBox_TTS.Text = config.TextToSpeech;
         }
 
         private void MessageReceived(string connection, long epoch, byte[] message)
@@ -56,7 +57,6 @@ namespace Qitana.DFAPlugin
         private void textBox_TTS_TextChanged(object sender, EventArgs e)
         {
             this.config.TextToSpeech = this.textBox_TTS.Text;
-
         }
 
 
@@ -70,7 +70,6 @@ namespace Qitana.DFAPlugin
             {
                 this.traceWindow = new DFATraceWindow();
                 this.traceWindow.Show();
-
             }
         }
 
