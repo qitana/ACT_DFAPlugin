@@ -74,7 +74,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigEventArgs.cs" />
     <Compile Include="DFADataModel.cs" />
     <Compile Include="DFAEventSource.cs" />
     <Compile Include="DFAEventSourceConfig.cs" />
@@ -116,6 +115,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DFAEventSourceConfigPanel.ja-JP.resx">
+      <DependentUpon>DFAEventSourceConfigPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DFAEventSourceConfigPanel.resx">
       <DependentUpon>DFAEventSourceConfigPanel.cs</DependentUpon>
     </EmbeddedResource>
