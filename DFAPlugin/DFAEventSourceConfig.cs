@@ -13,7 +13,7 @@ namespace Qitana.DFAPlugin
     public class DFAEventSourceConfig
     {
         public string StructuresURL { get; set; } = "https://qitana.github.io/ACT_DFAPlugin/data/structures.json";
-        public string TextToSpeech { get; set; } = @"${matched}";
+        public string TextToSpeech { get; set; } = "${matched}";
         public List<Structure> Structures { get; set; } = new List<Structure>();
         
         public class Structure
@@ -47,19 +47,19 @@ namespace Qitana.DFAPlugin
             {
                 var obj = pluginConfig.EventSourceConfigs["DFA"];
 
-                if (obj.TryGetValue("StructuresURL", out JToken value))
+                if (obj.TryGetValue("StructuresURL", out JToken structuresURL))
                 {
-                    result.StructuresURL = value.ToString();
+                    result.StructuresURL = structuresURL.ToString();
                 }
 
-                if (obj.TryGetValue("TextToSpeech", out value))
+                if (obj.TryGetValue("TextToSpeech", out JToken textToSpeech))
                 {
-                    result.TextToSpeech = value.ToString();
+                    result.TextToSpeech = textToSpeech.ToString();
                 }
 
-                if (obj.TryGetValue("Structures", out value))
+                if (obj.TryGetValue("Structures", out JToken structures))
                 {
-                    result.Structures = value.ToObject<List<Structure>>();
+                    result.Structures = structures.ToObject<List<Structure>>();
                 }
 
                 /*
