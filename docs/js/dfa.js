@@ -176,12 +176,10 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
 
             if (newStatus.MatchingStateString == "MATCHED") {
               if (this.status.IsMatched == false) {
-                console.log(newStatus.DungeonCode);
                 let text = this.dungeons[newStatus.DungeonCode]
                 for (var key in this.phonetics) {
                   text = text.replace(key, this.phonetics[key]);
                 }
-                console.log(text);
                 window.callOverlayHandler({ call: 'DFATTS', text: text })
               }
               newStatus.IsMatched = true;
