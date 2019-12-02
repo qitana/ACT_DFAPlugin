@@ -12,8 +12,8 @@ namespace Qitana.DFAPlugin
     [Serializable]
     public class DFAEventSourceConfig
     {
-        public string StructuresURL { get; set; } = string.Empty;
-        public string TextToSpeech { get; set; } = string.Empty;
+        public string StructuresURL { get; set; } = "https://qitana.github.io/ACT_DFAPlugin/data/structures.json";
+        public string TextToSpeech { get; set; } = @"${matched}";
         public List<Structure> Structures { get; set; } = new List<Structure>();
         
         public class Structure
