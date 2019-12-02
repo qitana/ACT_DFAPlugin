@@ -2,7 +2,7 @@
 
 const getDungeonData = new Promise((resolve, reject) => {
   let xmlHttpRequest = new XMLHttpRequest();
-  xmlHttpRequest.onloadend  = function () {
+  xmlHttpRequest.onloadend = function () {
     if (this.readyState == 4 && this.status == 200) {
       if (this.response) {
         resolve(this.response)
@@ -10,7 +10,7 @@ const getDungeonData = new Promise((resolve, reject) => {
         reject();
       }
     }
-    else{
+    else {
       reject();
     }
   }
@@ -22,7 +22,7 @@ const getDungeonData = new Promise((resolve, reject) => {
 
 const getRouletteData = new Promise((resolve, reject) => {
   let xmlHttpRequest = new XMLHttpRequest();
-  xmlHttpRequest.onloadend  = function () {
+  xmlHttpRequest.onloadend = function () {
     if (this.readyState == 4 && this.status == 200) {
       if (this.response) {
         resolve(this.response)
@@ -30,7 +30,7 @@ const getRouletteData = new Promise((resolve, reject) => {
         reject();
       }
     }
-    else{
+    else {
       reject();
     }
   }
@@ -41,7 +41,7 @@ const getRouletteData = new Promise((resolve, reject) => {
 
 const getPhoneticData = new Promise((resolve, reject) => {
   let xmlHttpRequest = new XMLHttpRequest();
-  xmlHttpRequest.onloadend  = function () {
+  xmlHttpRequest.onloadend = function () {
     if (this.readyState == 4 && this.status == 200) {
       if (this.response) {
         resolve(this.response)
@@ -49,7 +49,7 @@ const getPhoneticData = new Promise((resolve, reject) => {
         reject();
       }
     }
-    else{
+    else {
       reject();
     }
   }
@@ -83,8 +83,8 @@ let localeStrings = {
     numberOfPeople: '人',
     numberOfPeopleWaiting: '人待ち',
     avgWaitTime: '平均待機時間',
-    expectedWaitTime: '推定残り待ち時間',
-    partyStatus: "パーティ構築状況",
+    expectedWaitTime: '推定待ち時間',
+    partyStatus: "構築状況",
   },
 };
 
@@ -165,7 +165,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
               }
 
               newStatus.ExpectedWaitTimeSeconds = ((newStatus.WaitTime * 60 * 1000) - (Date.now() - newStatus.QueueStarted)) / 1000;
-              if(newStatus.ExpectedWaitTimeSeconds <= 0) {
+              if (newStatus.ExpectedWaitTimeSeconds <= 0) {
                 newStatus.ExpectedWaitTimeSeconds = 0;
               }
               newStatus.IsQueued = true;
@@ -236,7 +236,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
       },
     });
   })
-  .catch(error=> {
+  .catch(error => {
     console.log(error);
   });
 
