@@ -1,4 +1,5 @@
 ﻿using Advanced_Combat_Tracker;
+using FFXIV_ACT_Plugin.Common;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RainbowMage.OverlayPlugin;
@@ -24,8 +25,8 @@ namespace Qitana.DFAPlugin
         public event DFAStatusUpdateHandler onDFAStatusUpdate;
 
         private IActPluginV1 ffxivPlugin;
-        internal FFXIV_ACT_Plugin.Common.NetworkReceivedDelegate ffxivPluginNetworkReceivedDelegate;
-        internal FFXIV_ACT_Plugin.Common.ZoneChangedDelegate ffxivPluginZoneChangedDelegate;
+        internal NetworkReceivedDelegate ffxivPluginNetworkReceivedDelegate;
+        internal ZoneChangedDelegate ffxivPluginZoneChangedDelegate;
         private IEnumerable<ushort> opcodeList = new List<ushort>();
         private static HttpClient httpClient = new HttpClient(new WebRequestHandler()
         {
@@ -105,7 +106,7 @@ namespace Qitana.DFAPlugin
             RegisterEventHandler("DFATTS", (msg) =>
             {
                 string text = Config.TextToSpeech.Replace(@"${matched}", msg["text"].ToString());
-                Advanced_Combat_Tracker.ActGlobals.oFormActMain.TTS(text);
+                ActGlobals.oFormActMain.TTS(text);
                 return null;
             });
         }
@@ -115,12 +116,11 @@ namespace Qitana.DFAPlugin
             onDFAStatusUpdate -= (e) => DispatchToJS(e);
             onDFAStatusUpdate += (e) => DispatchToJS(e);
 
-            LogInfo(Config.StructuresURL);
             this.Config.Structures = UpdateStructuresAsync().Result;
             this.opcodeList = this.Config.Structures.Select(x => x.Opcode);
 
-            this.ffxivPluginNetworkReceivedDelegate = new FFXIV_ACT_Plugin.Common.NetworkReceivedDelegate(NetworkReceived);
-            this.ffxivPluginZoneChangedDelegate = new FFXIV_ACT_Plugin.Common.ZoneChangedDelegate(ZoneChanged);
+            this.ffxivPluginNetworkReceivedDelegate = new NetworkReceivedDelegate(NetworkReceived);
+            this.ffxivPluginZoneChangedDelegate = new ZoneChangedDelegate(ZoneChanged);
 
             SetupTimers();
             StartTimers();
@@ -237,9 +237,11 @@ namespace Qitana.DFAPlugin
 
             if (!Uri.IsWellFormedUriString(Config.StructuresURL, UriKind.Absolute))
             {
-                LogError("GetStructures: Invalid URL: {0}", Config.StructuresURL);
+                LogError("DFA: GetStructures: Invalid URL: {0}", Config.StructuresURL);
                 return result;
             }
+
+            LogInfo("DFA: GetStructures: URL: {0}", Config.StructuresURL);
 
             HttpResponseMessage httpResponse;
             try
@@ -248,13 +250,13 @@ namespace Qitana.DFAPlugin
             }
             catch (Exception ex)
             {
-                LogError("GetStructures: {0} Exception: {1}", Config.StructuresURL, ex.Message);
+                LogError("DFA: GetStructures: {0} Exception: {1}", Config.StructuresURL, ex.Message);
                 return result;
             }
 
             if (!httpResponse.IsSuccessStatusCode)
             {
-                LogError("GetStructures: {0} Response: {1}", Config.StructuresURL, httpResponse.StatusCode);
+                LogError("DFA: GetStructures: {0} Response: {1}", Config.StructuresURL, httpResponse.StatusCode);
                 return result;
             }
 
@@ -265,7 +267,7 @@ namespace Qitana.DFAPlugin
             }
             catch (Exception ex)
             {
-                LogError("GetStructures: {0} Exception on Deserialize: {1}", Config.StructuresURL, ex.Message);
+                LogError("DFA: GetStructures: {0} Exception on Deserialize: {1}", Config.StructuresURL, ex.Message);
                 return result;
             }
 
@@ -304,7 +306,7 @@ namespace Qitana.DFAPlugin
                         ((FFXIV_ACT_Plugin.FFXIV_ACT_Plugin)this.ffxivPlugin).DataSubscription.ZoneChanged -= ffxivPluginZoneChangedDelegate;
                         ((FFXIV_ACT_Plugin.FFXIV_ACT_Plugin)this.ffxivPlugin).DataSubscription.ZoneChanged += ffxivPluginZoneChangedDelegate;
                         IsDataSubscriptionHandled = true;
-                        LogInfo("DataSubscription Handled");
+                        LogInfo("DFA: Handled: DataSubscription");
                     }
                     catch
                     {
@@ -392,17 +394,6 @@ namespace Qitana.DFAPlugin
                             status.DungeonCode = dungeon;
                             status.MatchingState = MatchingState.MATCHED;
                         }
-
-                        /*
-                        if (!string.IsNullOrWhiteSpace(TTS))
-                        {
-                            DFACoreLog("TTS RawString   : " + TTS);
-                            var ttsString = ReplaceTtsVars(TTS, RouletteCode, Code);
-                            DFACoreLog("TTS SpeachString: " + ttsString);
-                            ActGlobals.oFormActMain.TTS(ttsString);
-                        }
-                        */
-
                         onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Matched [{0}/{1}]", roulette, dungeon);
 
