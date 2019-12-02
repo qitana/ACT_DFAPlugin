@@ -47,7 +47,7 @@ if (!(Test-Path $msSdkDir)) {
     Write-Output ("Microsoft Windows 10 SDK をインストールして下さい。")
     EndConfigure
 }
-$ildasm_exes = Get-ChildItem "C:\Program Files (x86)\Microsoft SDKs" -Recurse -Filter "ildasm.exe" | Sort-Object -Property FullName -Descending
+$ildasm_exes = Get-ChildItem "C:\Program Files (x86)\Microsoft SDKs" -Recurse -Filter "ildasm.exe" | Sort-Object -Property LastWriteTime -Descending
 if($ildasm_exes.Length -eq 0) {
     Write-Output ("エラー: ildasm.exe が見つかりませんでした。")
     Write-Output ("Microsoft Windows 10 SDK をインストールして下さい。")
