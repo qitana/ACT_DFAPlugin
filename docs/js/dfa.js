@@ -1,5 +1,6 @@
 'use strict'
 
+// ダンジョンのリストを取得します
 const getDungeonData = new Promise((resolve, reject) => {
   let xmlHttpRequest = new XMLHttpRequest();
   xmlHttpRequest.onloadend = function () {
@@ -19,7 +20,7 @@ const getDungeonData = new Promise((resolve, reject) => {
   xmlHttpRequest.send(null);
 });
 
-
+// ルーレットのリストを取得します
 const getRouletteData = new Promise((resolve, reject) => {
   let xmlHttpRequest = new XMLHttpRequest();
   xmlHttpRequest.onloadend = function () {
@@ -39,6 +40,7 @@ const getRouletteData = new Promise((resolve, reject) => {
   xmlHttpRequest.send(null);
 });
 
+// 読み(ふりがな)のリストを取得します
 const getPhoneticData = new Promise((resolve, reject) => {
   let xmlHttpRequest = new XMLHttpRequest();
   xmlHttpRequest.onloadend = function () {
@@ -59,6 +61,7 @@ const getPhoneticData = new Promise((resolve, reject) => {
 });
 
 
+// UIの各言語表記
 let localeStrings = {
   'English': {
     status: 'Status',
@@ -92,12 +95,15 @@ var localeDungeons = {};
 var localeRoulettes = {};
 var localePhonetics = {};
 
+// Main
 Promise.all([getDungeonData, getRouletteData, getPhoneticData])
   .then(values => {
+    // 必要なリソースを取得
     localeDungeons = values[0]
     localeRoulettes = values[1]
     localePhonetics = values[2]
   }).then(() => {
+    // Vue 初期化
     var dfa = new Vue({
       el: '#dfa',
       data: {
@@ -113,6 +119,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
         phonetics: {},
       },
       attached: function () {
+        // getLanguage で言語を取得して設定
         window.callOverlayHandler({ call: 'getLanguage' }).then((msg) => {
           if (msg.language in localeStrings) {
             this.strings = localeStrings[msg.language];
@@ -127,44 +134,50 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
             this.phonetics = localePhonetics['English'];
           }
 
+          // EventListener を登録&開始
           window.addOverlayListener('onDFAStatusUpdateEvent', this.update);
-          document.addEventListener('onOverlayStateUpdate', this.updateState);
+          window.addEventListener('onOverlayStateUpdate', this.updateState);
           window.startOverlayEvents();
         });
       },
       detached: function () {
+        // EventListener を停止
         window.removeOverlayListener('onDFAStatusUpdateEvent', this.update);
-        document.removeEventListener('onOverlayStateUpdate', this.updateState);
+        window.removeEventListener('onOverlayStateUpdate', this.updateState);
       },
       methods: {
+        // DFA Status のアップデート
         update: function (updateMessage) {
           if (updateMessage.type && updateMessage.type == "onDFAStatusUpdateEvent") {
             let newStatus = JSON.parse(updateMessage.detail.statusJson)
 
+            // init QueueStarted
             if (this.status.QueueStarted) {
               newStatus.QueueStarted = this.status.QueueStarted
             } else {
               newStatus.QueueStarted = null;
             }
 
+            // init lastMatched
             if (this.status.lastMatched) {
               newStatus.lastMatched = this.status.lastMatched
             } else {
               newStatus.lastMatched = new Date(2000, 0, 1, 0, 0, 0);
             }
 
-
+            // Idle
             if (newStatus.MatchingStateString == "IDLE") {
               newStatus.IsIdle = true;
             } else {
               newStatus.IsIdle = falses;
             }
 
+            // Queued
             if (newStatus.MatchingStateString == "QUEUED") {
               if (this.status.MatchingStateString != "QUEUED") {
                 newStatus.QueueStarted = new Date();
               }
-
+              // Calc EWT
               newStatus.ExpectedWaitTimeSeconds = ((newStatus.WaitTime * 60 * 1000) - (Date.now() - newStatus.QueueStarted)) / 1000;
               if (newStatus.ExpectedWaitTimeSeconds <= 0) {
                 newStatus.ExpectedWaitTimeSeconds = 0;
@@ -175,6 +188,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
               newStatus.IsQueued = false;
             }
 
+            // Matched
             if (newStatus.MatchingStateString == "MATCHED") {
               if (this.status.IsMatched == false) {
                 let text = this.dungeons[newStatus.DungeonCode]
@@ -189,15 +203,14 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
               newStatus.IsMatched = false;
             }
 
+            // Roulette
             if (Number(newStatus.RouletteCode) > 0) {
               newStatus.IsRoulette = true;
             } else {
               newStatus.IsRoulette = false;
             }
 
-            if (newStatus.StartQueueingTime) {
-            }
-
+            // 残りの人数計算
             newStatus.Remains = (newStatus.TankMax - newStatus.Tank) + (newStatus.HealerMax - newStatus.Healer) + (newStatus.DpsMax - newStatus.Dps)
 
             if (newStatus.MatchingStateString == "IDLE" && Date.now() - newStatus.lastMatched < 12000) {
@@ -213,6 +226,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
 
           this.updated = true;
         },
+        // Overlayの設定アップデート
         updateState: function (e) {
           this.locked = e.detail.isLocked;
         },
