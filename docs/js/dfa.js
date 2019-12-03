@@ -169,7 +169,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
             if (newStatus.MatchingStateString == "IDLE") {
               newStatus.IsIdle = true;
             } else {
-              newStatus.IsIdle = falses;
+              newStatus.IsIdle = false;
             }
 
             // Queued
