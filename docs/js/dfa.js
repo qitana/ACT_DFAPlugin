@@ -104,7 +104,6 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
         updated: false,
         locked: true,
         collapsed: false,
-        hide: false,
         status: {
           Hide: true,
         },
@@ -156,7 +155,9 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
 
 
             if (newStatus.MatchingStateString == "IDLE") {
+              newStatus.IsIdle = true;
             } else {
+              newStatus.IsIdle = falses;
             }
 
             if (newStatus.MatchingStateString == "QUEUED") {
@@ -199,8 +200,8 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
 
             newStatus.Remains = (newStatus.TankMax - newStatus.Tank) + (newStatus.HealerMax - newStatus.Healer) + (newStatus.DpsMax - newStatus.Dps)
 
-            if (newStatus.MatchingStateString == "IDLE" && Date.now() - newStatus.lastMatched < 10000) {
-              // keep showing..
+            if (newStatus.MatchingStateString == "IDLE" && Date.now() - newStatus.lastMatched < 12000) {
+              // keep last status
             } else if (newStatus.MatchingStateString == "IDLE") {
               newStatus.Hide = true;
               this.status = newStatus;
@@ -211,10 +212,6 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
           }
 
           this.updated = true;
-          if (this.hide)
-            document.getElementById('dfa').style.visibility = 'hidden';
-          else
-            document.getElementById('dfa').style.visibility = 'visible';
         },
         updateState: function (e) {
           this.locked = e.detail.isLocked;
