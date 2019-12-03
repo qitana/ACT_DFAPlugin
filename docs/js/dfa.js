@@ -105,7 +105,7 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
   }).then(() => {
     // Vue 初期化
     var dfa = new Vue({
-      el: '#dfa',
+      el: '#vue',
       data: {
         updated: false,
         locked: true,
@@ -118,32 +118,36 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
         roulettes: {},
         phonetics: {},
       },
-      attached: function () {
-        // getLanguage で言語を取得して設定
-        window.callOverlayHandler({ call: 'getLanguage' }).then((msg) => {
-          if (msg.language in localeStrings) {
-            this.strings = localeStrings[msg.language];
-            this.dungeons = localeDungeons[msg.language];
-            this.roulettes = localeRoulettes[msg.language];
-            this.phonetics = localePhonetics[msg.language];
-          }
-          else {
-            this.strings = localeStrings['English'];
-            this.dungeons = localeDungeons['English'];
-            this.roulettes = localeRoulettes['English'];
-            this.phonetics = localePhonetics['English'];
-          }
+      mounted: function () {
+        this.$nextTick(function () {
+          // getLanguage で言語を取得して設定
+          window.callOverlayHandler({ call: 'getLanguage' }).then((msg) => {
+            if (msg.language in localeStrings) {
+              this.strings = localeStrings[msg.language];
+              this.dungeons = localeDungeons[msg.language];
+              this.roulettes = localeRoulettes[msg.language];
+              this.phonetics = localePhonetics[msg.language];
+            }
+            else {
+              this.strings = localeStrings['English'];
+              this.dungeons = localeDungeons['English'];
+              this.roulettes = localeRoulettes['English'];
+              this.phonetics = localePhonetics['English'];
+            }
 
-          // EventListener を登録&開始
-          window.addOverlayListener('onDFAStatusUpdateEvent', this.update);
-          document.addEventListener('onOverlayStateUpdate', this.updateState);
-          window.startOverlayEvents();
+            // EventListener を登録&開始
+            window.addOverlayListener('onDFAStatusUpdateEvent', this.update);
+            document.addEventListener('onOverlayStateUpdate', this.updateState);
+            window.startOverlayEvents();
+          });
         });
       },
-      detached: function () {
-        // EventListener を停止
-        window.removeOverlayListener('onDFAStatusUpdateEvent', this.update);
-        document.removeEventListener('onOverlayStateUpdate', this.updateState);
+      destroyed: function () {
+        this.$nextTick(function () {
+          // EventListener を停止
+          window.removeOverlayListener('onDFAStatusUpdateEvent', this.update);
+          document.removeEventListener('onOverlayStateUpdate', this.updateState);
+        });
       },
       methods: {
         // DFA Status のアップデート
