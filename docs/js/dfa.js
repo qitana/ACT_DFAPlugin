@@ -136,14 +136,14 @@ Promise.all([getDungeonData, getRouletteData, getPhoneticData])
 
           // EventListener を登録&開始
           window.addOverlayListener('onDFAStatusUpdateEvent', this.update);
-          window.addEventListener('onOverlayStateUpdate', this.updateState);
+          document.addEventListener('onOverlayStateUpdate', this.updateState);
           window.startOverlayEvents();
         });
       },
       detached: function () {
         // EventListener を停止
         window.removeOverlayListener('onDFAStatusUpdateEvent', this.update);
-        window.removeEventListener('onOverlayStateUpdate', this.updateState);
+        document.removeEventListener('onOverlayStateUpdate', this.updateState);
       },
       methods: {
         // DFA Status のアップデート
