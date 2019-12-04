@@ -10,7 +10,7 @@
   <!-- vue block -->
   <div id="vue" v-bind:class="{ 'resize-handle': !locked }">
     <!-- outer -->
-    <div v-cloak v-if="!status.Hide || !locked" class="outer">
+    <div v-cloak v-show="!(status.Hide && locked)" class="outer">
       <!-- innner -->
       <div class="inner">
         <div class="background"></div>
