@@ -17,7 +17,7 @@ if ($null -eq $msbuild) {
 	return
 }
 & $msbuild DFAPlugin.sln /nologo /v:minimal /t:Clean /p:Configuration=Release /p:Platform="Any CPU" | Write-Output
-& ".\tools\nuget.exe" restore DFAPlugin.sln | Write-Output
+& $msbuild DFAPlugin.sln /nologo /v:minimal /t:Restore /p:Configuration=Release /p:Platform="Any CPU" | Write-Output
 & $msbuild DFAPlugin.sln /nologo /v:minimal /t:Rebuild /p:Configuration=Release /p:Platform="Any CPU" | Write-Output
 
 # バージョン取得
