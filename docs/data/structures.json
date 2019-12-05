@@ -17,11 +17,7 @@
   },
   {
     "Name": "Canceled",
-    "Opcode": 972,
-    "Opcode2": 115,
-    "Offset": {
-      "Opcode2": 0
-    }
+    "Opcode": 613
   },
   {
     "Name": "WaitQueue",
