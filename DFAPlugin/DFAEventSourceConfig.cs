@@ -20,12 +20,10 @@ namespace Qitana.DFAPlugin
         {
             public string Name { get; set; }
             public ushort Opcode { get; set; }
-            public ushort Opcode2 { get; set; }
             public Offsets Offset { get; set; } = new Offsets();
 
             public class Offsets
             {
-                public int Opcode2 { get; set; }
                 public int RouletteCode { get; set; }
                 public int DungeonCode { get; set; }
                 public int WaitList { get; set; }
