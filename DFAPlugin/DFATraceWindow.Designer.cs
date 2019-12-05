@@ -35,6 +35,7 @@
             this.button_ClearFilter = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.button_SaveMessage = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox_Messages
@@ -61,7 +62,7 @@
             this.checkBox_Filter.Location = new System.Drawing.Point(582, 416);
             this.checkBox_Filter.Name = "checkBox_Filter";
             this.checkBox_Filter.Size = new System.Drawing.Size(100, 22);
-            this.checkBox_Filter.TabIndex = 3;
+            this.checkBox_Filter.TabIndex = 4;
             this.checkBox_Filter.Text = "Start Filter";
             this.checkBox_Filter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.checkBox_Filter.UseVisualStyleBackColor = true;
@@ -100,7 +101,7 @@
             this.button_ClearFilter.Location = new System.Drawing.Point(688, 415);
             this.button_ClearFilter.Name = "button_ClearFilter";
             this.button_ClearFilter.Size = new System.Drawing.Size(100, 23);
-            this.button_ClearFilter.TabIndex = 4;
+            this.button_ClearFilter.TabIndex = 5;
             this.button_ClearFilter.Text = "Clear Filter";
             this.button_ClearFilter.UseVisualStyleBackColor = true;
             this.button_ClearFilter.Click += new System.EventHandler(this.button_ClearFilter_Click);
@@ -124,11 +125,23 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Filter";
             // 
+            // button_SaveMessage
+            // 
+            this.button_SaveMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_SaveMessage.Location = new System.Drawing.Point(466, 415);
+            this.button_SaveMessage.Name = "button_SaveMessage";
+            this.button_SaveMessage.Size = new System.Drawing.Size(110, 23);
+            this.button_SaveMessage.TabIndex = 3;
+            this.button_SaveMessage.Text = "Save Messages";
+            this.button_SaveMessage.UseVisualStyleBackColor = true;
+            this.button_SaveMessage.Click += new System.EventHandler(this.button_SaveMessage_Click);
+            // 
             // DFATraceWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button_SaveMessage);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_ClearFilter);
@@ -152,5 +165,6 @@
         private System.Windows.Forms.Button button_ClearFilter;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button_SaveMessage;
     }
 }
