@@ -13,16 +13,12 @@ using System.Threading.Tasks;
 namespace Qitana.DFAPlugin
 {
 
-    public class DFAEventSource : EventSourceBase, ILogger
+    public class DFAEventSource : EventSourceBase
     {
         public DFAEventSourceConfig Config { get; private set; }
 
         private System.Timers.Timer processCheckTimer;
         private System.Timers.Timer updateEventTimer;
-
-        // Events
-        public delegate void DFAStatusUpdateHandler(JSEvents.DFAStatusUpdateEvent e);
-        public event DFAStatusUpdateHandler onDFAStatusUpdate;
 
         private IActPluginV1 ffxivPlugin;
         internal NetworkReceivedDelegate ffxivPluginNetworkReceivedDelegate;
@@ -100,7 +96,7 @@ namespace Qitana.DFAPlugin
 
             RegisterEventTypes(new List<string>()
             {
-                "onAddonExampleOriginalTimerFiredEvent", "onDFAStatusUpdateEvent"
+                "onDFAStatusUpdateEvent"
             });
 
             RegisterEventHandler("DFATTS", (msg) =>
@@ -113,9 +109,6 @@ namespace Qitana.DFAPlugin
 
         public override void Start()
         {
-            onDFAStatusUpdate -= (e) => DispatchToJS(e);
-            onDFAStatusUpdate += (e) => DispatchToJS(e);
-
             this.Config.Structures = UpdateStructuresAsync().Result;
             this.opcodeList = this.Config.Structures.Select(x => x.Opcode);
 
@@ -144,6 +137,10 @@ namespace Qitana.DFAPlugin
             base.Dispose();
         }
 
+        public void DFAStatusUpdate(JSEvents.DFAStatusUpdateEvent e)
+        {
+            DispatchToJS(e);
+        }
 
         public void SetupTimers()
         {
@@ -178,7 +175,7 @@ namespace Qitana.DFAPlugin
             {
                 if (IsAttached)
                 {
-                    onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                    DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                 }
             };
 
@@ -331,7 +328,7 @@ namespace Qitana.DFAPlugin
                     status.Clear();
                 }
 
-                onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                 LogInfo("DFA: ZoneChanged: {0}, {1}", zoneId, zoneName);
             }
         }
@@ -377,7 +374,7 @@ namespace Qitana.DFAPlugin
                             status.MatchingState = MatchingState.QUEUED;
                         }
 
-                        onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Queued [{0}/{1}]", roulette, dungeon);
 
                     }
@@ -394,7 +391,7 @@ namespace Qitana.DFAPlugin
                             status.DungeonCode = dungeon;
                             status.MatchingState = MatchingState.MATCHED;
                         }
-                        onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Matched [{0}/{1}]", roulette, dungeon);
 
                     }
@@ -411,7 +408,7 @@ namespace Qitana.DFAPlugin
                             }
                         }
 
-                        onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Canceled");
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "WaitQueue").Opcode)
@@ -439,7 +436,7 @@ namespace Qitana.DFAPlugin
                             status.MatchingState = MatchingState.QUEUED;
                         }
 
-                        onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Queued: WaitList:{0} WaitTime:{1} Tank:{2}/{3} Healer:{4}/{5} DPS:{6}/{7}",
                             waitList, waitTime, tank, tankMax, healer, healerMax, dps, dpsMax);
 
@@ -465,7 +462,7 @@ namespace Qitana.DFAPlugin
                             status.MatchingState = MatchingState.MATCHED;
                         }
 
-                        onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Matched: Tank:{0}/{1} Healer:{2}/{3} DPS:{4}/{5}",
                             tank, tankMax, healer, healerMax, dps, dpsMax);
 
@@ -477,7 +474,7 @@ namespace Qitana.DFAPlugin
                             status.Clear();
                         }
 
-                        onDFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
                         LogInfo("DFA: Competed");
                     }
                 }
@@ -568,13 +565,4 @@ namespace Qitana.DFAPlugin
         }
 
     }
-
-    public interface ILogger
-    {
-        void LogDebug(string format, params object[] args);
-        void LogError(string format, params object[] args);
-        void LogWarning(string format, params object[] args);
-        void LogInfo(string format, params object[] args);
-    }
-
 }
