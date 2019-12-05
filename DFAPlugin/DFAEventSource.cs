@@ -188,7 +188,7 @@ namespace Qitana.DFAPlugin
                 processCheckTimer.Start();
             }
 
-            if(updateEventTimer != null)
+            if (updateEventTimer != null)
             {
                 updateEventTimer.Start();
             }
@@ -354,9 +354,9 @@ namespace Qitana.DFAPlugin
 
                 try
                 {
-                    if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "DutyAccepted").Opcode)
+                    if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "Started").Opcode)
                     {
-                        var structure = Config.Structures.FirstOrDefault(x => x.Name == "DutyAccepted");
+                        var structure = Config.Structures.FirstOrDefault(x => x.Name == "Started");
                         var roulette = BitConverter.ToUInt16(data, structure.Offset.RouletteCode);
                         var dungeon = BitConverter.ToUInt16(data, structure.Offset.DungeonCode);
 
@@ -398,14 +398,9 @@ namespace Qitana.DFAPlugin
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "Canceled").Opcode)
                     {
                         var structure = Config.Structures.FirstOrDefault(x => x.Name == "Canceled");
-                        var opcode2 = structure.Opcode2;
-
-                        if (data[structure.Offset.Opcode2] == structure.Opcode2)
+                        lock (status.LockObject)
                         {
-                            lock (status.LockObject)
-                            {
-                                status.Clear();
-                            }
+                            status.Clear();
                         }
 
                         DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
