@@ -39,12 +39,25 @@ namespace Qitana.DFAPlugin
 
         public static DFAEventSourceConfig LoadConfig(IPluginConfig pluginConfig)
         {
+            /**
+             * Now Renameing Key "DFA" to "qitana.DFA" started v2.1.1
+             * In future release,  Load "DFA" section will remove.
+             */
+
             var result = new DFAEventSourceConfig();
+            JObject obj = null;
 
-            if (pluginConfig.EventSourceConfigs.ContainsKey("DFA"))
+            if (pluginConfig.EventSourceConfigs.ContainsKey("qitana.DFA"))
             {
-                var obj = pluginConfig.EventSourceConfigs["DFA"];
+                obj = pluginConfig.EventSourceConfigs["qitana.DFA"];
+            } 
+            else if (pluginConfig.EventSourceConfigs.ContainsKey("DFA"))
+            {
+                obj = pluginConfig.EventSourceConfigs["DFA"];
+            }
 
+            if (obj != null)
+            {
                 if (obj.TryGetValue("StructuresURL", out JToken structuresURL))
                 {
                     result.StructuresURL = structuresURL.ToString();
@@ -59,23 +72,6 @@ namespace Qitana.DFAPlugin
                 {
                     result.Structures = structures.ToObject<List<Structure>>();
                 }
-
-                /*
-                if (obj.TryGetValue("data", out JToken value))
-                {
-                    result.data = value.ToObject<Dictionary<string, string>>();
-                }
-
-                if (obj.TryGetValue("stringdata", out value))
-                {
-                    result.stringdata = value.ToString();
-                }
-
-                if (obj.TryGetValue("booldata", out value))
-                {
-                    result.booldata = value.ToObject<bool>();
-                }
-                */
             }
 
             return result;
@@ -83,9 +79,16 @@ namespace Qitana.DFAPlugin
 
         public void SaveConfig(IPluginConfig pluginConfig)
         {
-            pluginConfig.EventSourceConfigs["DFA"] = JObject.FromObject(this);
-        }
+            /**
+             * Now Renameing Key "DFA" to "qitana.DFA" started v2.1.1
+             * In future release,  Save "DFA" => null section will remove.
+             */
+            if (pluginConfig.EventSourceConfigs.ContainsKey("DFA"))
+            {
+                pluginConfig.EventSourceConfigs.Remove("DFA");
+            }
 
-        
+            pluginConfig.EventSourceConfigs["qitana.DFA"] = JObject.FromObject(this);
+        }
     }
 }
