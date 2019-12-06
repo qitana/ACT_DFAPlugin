@@ -182,7 +182,7 @@ var dfa = new Vue({
 
         // Queued
         if (newStatus.MatchingStateString == "QUEUED") {
-          if (this.status.MatchingStateString != "QUEUED") {
+          if (this.status.MatchingStateString == "IDLE") {
             newStatus.QueueStarted = new Date();
           }
           // Calc EWT
