@@ -115,7 +115,7 @@ var dfa = new Vue({
   mounted: function () {
     this.$nextTick(function () {
       document.addEventListener('onOverlayStateUpdate', this.updateState);
-      
+
       // 必要なリソースを取得
       Promise.all([getDungeonData, getRouletteData, getPhoneticData])
         .then(values => {
@@ -136,9 +136,9 @@ var dfa = new Vue({
               this.roulettes = localeRoulettes['English'];
               this.phonetics = localePhonetics['English'];
             }
-            
+
             window.addOverlayListener('onDFAStatusUpdateEvent', this.update);
-            window.startOverlayEvents();      
+            window.startOverlayEvents();
           });
         })
         .catch(error => {
