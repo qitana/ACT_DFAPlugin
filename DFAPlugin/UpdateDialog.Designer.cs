@@ -19,5 +19,7 @@
             }
             base.Dispose(disposing);
         }
+
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
