@@ -8,8 +8,7 @@ namespace Qitana.DFAPlugin
     {
         public DFAPlugin()
         {
-            // static constructor should be called only once
-            //UpdateMessage = UpdateChecker.Check();
+            UpdateChecker.Check();
         }
 
         public static string pluginPath = "";
