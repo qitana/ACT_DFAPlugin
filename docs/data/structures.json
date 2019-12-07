@@ -1,6 +1,15 @@
 [
   {
+    "Notice": "Deprecated since v2.1.1. Use Started.",
     "Name": "DutyAccepted",
+    "Opcode": 582,
+    "Offset": {
+      "RouletteCode": 8,
+      "DungeonCode": 12
+    }
+  },
+  {
+    "Name": "Started",
     "Opcode": 582,
     "Offset": {
       "RouletteCode": 8,

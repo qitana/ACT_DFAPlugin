@@ -104,5 +104,25 @@ namespace Qitana.DFAPlugin
             filteredOpcode.Clear();
             textBox_Filtered.Clear();
         }
+
+        private void button_SaveMessage_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                FileName = "TraceMessage-" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss") + ".txt",
+                Filter = "テキストァイル(*.txt)|*.txt|すべてのファイル(*.*)|*.*",
+            };
+            string messages = this.textBox_Messages.Text;
+
+            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    System.IO.File.WriteAllText(saveFileDialog.FileName, messages, Encoding.UTF8);
+                }
+                catch
+                { }
+            }
+        }
     }
 }
