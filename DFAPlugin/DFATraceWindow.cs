@@ -14,10 +14,12 @@ namespace Qitana.DFAPlugin
     {
 
         private List<ushort> filteredOpcode = new List<ushort>();
+        private List<ushort> currentFilterOpcode = new List<ushort>();
 
-        public DFATraceWindow()
+        public DFATraceWindow(List<ushort> currentFilterOpcode)
         {
             InitializeComponent();
+            this.currentFilterOpcode = currentFilterOpcode;
         }
 
         public void HandleMessage(long epoch, byte[] message)
@@ -37,43 +39,55 @@ namespace Qitana.DFAPlugin
                     textBox_Filtered.AppendText(opcode.ToString("X4") + Environment.NewLine);
                 }
 
-                if (!filteredOpcode.Contains(opcode))
+                if (checkBox_CurrentFilter.Checked)
                 {
-                    string msg = "";
-                    var time = DateTimeOffset.FromUnixTimeMilliseconds(epoch).ToLocalTime().ToString("HH:mm:ss.fff");
-                    var data = message.Skip(32).Take(32).ToArray();
-                    msg += "---------------------------------------------------------------------------------------------------------------------------------------------" + Environment.NewLine;
-                    msg += time + " " + "(00)(01)(02)(03)(04)(05)(06)(07)(08)(09)(10)(11)(12)(13)(14)(15)(16)(17)(18)(19)(20)(21)(22)(23)(24)(25)(26)(27)(28)(29)(30)(31)" + Environment.NewLine;
-                    msg += "   " + " |0x" + opcode.ToString("X4") + "|  " + BitConverter.ToString(data).Replace("-", "--") + Environment.NewLine;
-
-                    msg += "    | " + opcode.ToString().PadLeft(5, ' ') + "|";
-                    for (int i = 0; i < data.Length; i++)
+                    if (!currentFilterOpcode.Contains(opcode))
                     {
-                        int val = data[i];
-                        msg += " " + val.ToString().PadLeft(3, ' ');
+                        return;
                     }
-                    msg += Environment.NewLine;
-
-                    msg += "            ";
-                    for (int i = 0; i < (data.Length / 2); i++)
-                    {
-                        var val = BitConverter.ToUInt16(data, i * 2);
-                        msg += "  " + val.ToString().PadLeft(6, ' ');
-                    }
-                    msg += Environment.NewLine;
-
-                    msg += "            ";
-                    for (int i = 0; i < (data.Length / 4); i++)
-                    {
-                        var val = BitConverter.ToUInt32(data, i * 4);
-                        msg += "  " + val.ToString().PadLeft(14, ' ');
-                    }
-                    msg += Environment.NewLine;
-
-                    this.SuspendLayout();
-                    textBox_Messages.AppendText(msg);
-                    this.ResumeLayout();
                 }
+                else
+                {
+                    if (filteredOpcode.Contains(opcode))
+                    {
+                        return;
+                    }
+                }
+
+                string msg = "";
+                var time = DateTimeOffset.FromUnixTimeMilliseconds(epoch).ToLocalTime().ToString("HH:mm:ss.fff");
+                var data = message.Skip(32).Take(32).ToArray();
+                msg += "---------------------------------------------------------------------------------------------------------------------------------------------" + Environment.NewLine;
+                msg += time + " " + "(00)(01)(02)(03)(04)(05)(06)(07)(08)(09)(10)(11)(12)(13)(14)(15)(16)(17)(18)(19)(20)(21)(22)(23)(24)(25)(26)(27)(28)(29)(30)(31)" + Environment.NewLine;
+                msg += "   " + " |0x" + opcode.ToString("X4") + "|  " + BitConverter.ToString(data).Replace("-", "--") + Environment.NewLine;
+
+                msg += "    | " + opcode.ToString().PadLeft(5, ' ') + "|";
+                for (int i = 0; i < data.Length; i++)
+                {
+                    int val = data[i];
+                    msg += " " + val.ToString().PadLeft(3, ' ');
+                }
+                msg += Environment.NewLine;
+
+                msg += "            ";
+                for (int i = 0; i < (data.Length / 2); i++)
+                {
+                    var val = BitConverter.ToUInt16(data, i * 2);
+                    msg += "  " + val.ToString().PadLeft(6, ' ');
+                }
+                msg += Environment.NewLine;
+
+                msg += "            ";
+                for (int i = 0; i < (data.Length / 4); i++)
+                {
+                    var val = BitConverter.ToUInt32(data, i * 4);
+                    msg += "  " + val.ToString().PadLeft(14, ' ');
+                }
+                msg += Environment.NewLine;
+
+                this.SuspendLayout();
+                textBox_Messages.AppendText(msg);
+                this.ResumeLayout();
 
             }
             catch
@@ -87,11 +101,43 @@ namespace Qitana.DFAPlugin
             if (checkBox.Checked)
             {
                 checkBox.Text = "Stop Filter";
+                checkBox.BackColor = Color.LightSkyBlue;
             }
             else
             {
                 checkBox.Text = "Start Filter";
+                checkBox.BackColor = SystemColors.Control;
             }
+        }
+
+        private void checkBox_CurrentFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+
+            if (checkBox.Checked)
+            {
+                checkBox.Text = "Stop Current Filter";
+                checkBox.BackColor = Color.LightSkyBlue;
+
+                this.checkBox_Filter.Checked = false;
+
+                this.checkBox_Filter.Enabled = false;
+                this.textBox_Filtered.Enabled = false;
+                this.textBox_Filtered.BackColor = SystemColors.Control;
+                this.button_ClearFilter.Enabled = false;
+            }
+            else
+            {
+                checkBox.Text = "Set Current Filter";
+                checkBox.BackColor = SystemColors.Control;
+
+                this.checkBox_Filter.Enabled = true;
+                this.textBox_Filtered.Enabled = true;
+                this.textBox_Filtered.BackColor = SystemColors.Window;
+                this.button_ClearFilter.Enabled = true;
+            }
+
+
         }
 
         private void button_ClearMessages_Click(object sender, EventArgs e)
@@ -114,7 +160,7 @@ namespace Qitana.DFAPlugin
             };
             string messages = this.textBox_Messages.Text;
 
-            if(saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -124,5 +170,6 @@ namespace Qitana.DFAPlugin
                 { }
             }
         }
+
     }
 }

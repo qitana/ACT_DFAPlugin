@@ -68,7 +68,7 @@ namespace Qitana.DFAPlugin
             }
             else
             {
-                this.traceWindow = new DFATraceWindow();
+                this.traceWindow = new DFATraceWindow(this.config.Structures.Select(x => x.Opcode).ToList());
                 this.traceWindow.Show();
             }
         }
