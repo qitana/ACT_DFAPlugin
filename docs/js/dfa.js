@@ -218,8 +218,24 @@ var dfa = new Vue({
           newStatus.IsRoulette = false;
         }
 
-        // 残りの人数計算
-        newStatus.Remains = (newStatus.TankMax - newStatus.Tank) + (newStatus.HealerMax - newStatus.Healer) + (newStatus.DpsMax - newStatus.Dps)
+        // When flows theoretical maximum count over, ignore retrived count and show "?" instead
+        if (newStatus.TankMax > 24 || newStatus.HealerMax > 24 || newStatus.DpsMax > 24 ||
+            newStatus.Tank    > 24 || newStatus.Healer    > 24 || newStatus.Dps    > 24)
+        {
+          newStatus.MatchingStateString = "MATCHED (FreeRole)";
+          newStatus.TankMax = "?";
+          newStatus.HealerMax = "?";
+          newStatus.DpsMax = "?";
+          newStatus.Tank = "?";
+          newStatus.Healer = "?";
+          newStatus.Dps = "?";
+          newStatus.Remains = "???";
+        }
+        else
+        {
+          // 残りの人数計算
+          newStatus.Remains = (newStatus.TankMax - newStatus.Tank) + (newStatus.HealerMax - newStatus.Healer) + (newStatus.DpsMax - newStatus.Dps)
+        }
 
         if (newStatus.MatchingStateString == "IDLE" && Date.now() - newStatus.lastMatched < 12000) {
           // keep last status
