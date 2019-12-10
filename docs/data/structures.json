@@ -21,7 +21,8 @@
     "Opcode": 309,
     "Offset": {
       "RouletteCode": 2,
-      "DungeonCode": 20
+      "DungeonCode": 20,
+      "RoleFreeFlag": 16
     }
   },
   {
@@ -51,7 +52,9 @@
       "Healer": 14,
       "HealerMax": 15,
       "Dps": 16,
-      "DpsMax": 17
+      "DpsMax": 17,
+      "NonRole": 18,
+      "NonRoleMax": 19
     }
   },
   {

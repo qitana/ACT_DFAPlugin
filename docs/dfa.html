@@ -49,10 +49,18 @@
           <div v-if="(status.IsQueued && !status.IsRoulette) || status.IsMatched || !locked" class="box">
             <div class="name">
               <span class="header">{{ strings.partyStatus }}: </span>
-              <span class="value">{{ strings.remainings }}:{{ status.Remains }}{{ strings.numberOfPeople }}
-                ( Tank:{{ status.Tank }}/{{ status.TankMax }}
-                Healer:{{ status.Healer }}/{{ status.HealerMax }}
-                DPS:{{ status.Dps }}/{{ status.DpsMax }} )</span>
+              <span class="value">
+                {{ strings.remainings }}:{{ status.Remains }}{{ strings.numberOfPeople }} (
+                <span v-if="status.IsQueued || (status.IsMatched && status.PartyStateString != 'ROLEFREE')">
+                  Tank:{{ status.Tank }}/{{ status.TankMax }}
+                  Healer:{{ status.Healer }}/{{ status.HealerMax }}
+                  DPS:{{ status.Dps }}/{{ status.DpsMax }}
+                </span>
+                <span v-if="status.IsMatched && status.PartyStateString != 'NORMAL'">
+                  NonRole:{{ status.NonRole }}/{{ status.NonRoleMax }}
+                </span>
+                )
+              </span>
             </div>
           </div>
           <!-- end of Front -->

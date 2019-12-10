@@ -26,6 +26,7 @@ namespace Qitana.DFAPlugin
             {
                 public int RouletteCode { get; set; }
                 public int DungeonCode { get; set; }
+                public int RoleFreeFlag { get; set; }
                 public int WaitList { get; set; }
                 public int WaitTime { get; set; }
                 public int Tank { get; set; }
@@ -34,6 +35,8 @@ namespace Qitana.DFAPlugin
                 public int HealerMax { get; set; }
                 public int Dps { get; set; }
                 public int DpsMax { get; set; }
+                public int NonRole { get; set; }
+                public int NonRoleMax { get; set; }
             }
         }
 
