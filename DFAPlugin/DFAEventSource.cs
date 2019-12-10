@@ -42,6 +42,10 @@ namespace Qitana.DFAPlugin
             public MatchingState MatchingState { get; set; } = MatchingState.IDLE;
             public string MatchingStateString => this.MatchingState.ToString();
 
+            [JsonIgnore]
+            public PartyState PartyState { get; set; } = PartyState.UNKNOWN;
+            public string PartyStateString => this.PartyState.ToString();
+
             public ushort RouletteCode { get; set; }
             public ushort DungeonCode { get; set; }
 
@@ -54,10 +58,13 @@ namespace Qitana.DFAPlugin
             public int HealerMax { get; set; }
             public int Dps { get; set; }
             public int DpsMax { get; set; }
+            public int NonRole { get; set; }
+            public int NonRoleMax { get; set; }
 
             public void Clear()
             {
                 this.MatchingState = MatchingState.IDLE;
+                this.PartyState = PartyState.UNKNOWN;
                 SetZero();
             }
             public void SetZero()
@@ -72,6 +79,8 @@ namespace Qitana.DFAPlugin
                 this.HealerMax = 0;
                 this.Dps = 0;
                 this.DpsMax = 0;
+                this.NonRole = 0;
+                this.NonRoleMax = 0;
             }
 
             public string ToJson()
@@ -84,6 +93,13 @@ namespace Qitana.DFAPlugin
             IDLE = 0,
             QUEUED = 1,
             MATCHED = 2,
+        }
+
+        public enum PartyState : int
+        {
+            NORMAL = 0,
+            ROLEFREE = 1,
+            UNKNOWN = 2
         }
 
         public bool IsDataSubscriptionHandled { get; set; } = false;
@@ -362,7 +378,7 @@ namespace Qitana.DFAPlugin
 
                         lock (status.LockObject)
                         {
-                            status.SetZero();
+                            status.Clear();
                             if (roulette != 0)
                             {
                                 status.RouletteCode = roulette;
@@ -383,12 +399,14 @@ namespace Qitana.DFAPlugin
                         var structure = Config.Structures.FirstOrDefault(x => x.Name == "Matched");
                         var roulette = BitConverter.ToUInt16(data, structure.Offset.RouletteCode);
                         var dungeon = BitConverter.ToUInt16(data, structure.Offset.DungeonCode);
+                        var roleFreeFlag = data[structure.Offset.RoleFreeFlag];
 
                         lock (status.LockObject)
                         {
                             status.SetZero();
                             status.RouletteCode = roulette;
                             status.DungeonCode = dungeon;
+                            status.PartyState = (roleFreeFlag > 0) ? PartyState.ROLEFREE : PartyState.NORMAL;
                             status.MatchingState = MatchingState.MATCHED;
                         }
                         DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
@@ -428,6 +446,8 @@ namespace Qitana.DFAPlugin
                             status.HealerMax = healerMax;
                             status.Dps = dps;
                             status.DpsMax = dpsMax;
+                            status.NonRole = 0;
+                            status.NonRoleMax = 0;
                             status.MatchingState = MatchingState.QUEUED;
                         }
 
@@ -445,21 +465,86 @@ namespace Qitana.DFAPlugin
                         var healerMax = data[structure.Offset.HealerMax];
                         var dps = data[structure.Offset.Dps];
                         var dpsMax = data[structure.Offset.DpsMax];
+                        var nonRole = data[structure.Offset.NonRole];
+                        var nonRoleMax = data[structure.Offset.NonRoleMax];
 
                         lock (status.LockObject)
                         {
-                            status.Tank = tank;
-                            status.TankMax = tankMax;
-                            status.Healer = healer;
-                            status.HealerMax = healerMax;
-                            status.Dps = dps;
-                            status.DpsMax = dpsMax;
+                            /*
+                             * Ref issue #3
+                             * 
+                             * ノーマルの場合、nonRole, nonRoleMax には不明な値が入る
+                             * 制限解除等ロールフリーの場合、tank,tankMax,healer,healerMax,dps,dpsMax には不明な値が入る
+                             * 24を閾値としてこれらの値を確認し、PartyStateがノーマルなのかロールフリーなのかを判定する。
+                             * 
+                             * すべて0な場合、どちらも不正な値の場合、どちらも正常な値だった場合は
+                             * PartyStateは判断できないためそのままにする。
+                             * 
+                             */
+
+                            var normalParty = new List<int> { tank, tankMax, healer, healerMax, dps, dpsMax };
+                            var roleFreeParty = new List<int> { nonRole, nonRoleMax };
+
+
+                            if ((normalParty.FindAll(x => x > 24).Count > 0 && roleFreeParty.FindAll(x => x > 24).Count > 0) ||
+                                (normalParty.FindAll(x => x == 0).Count == normalParty.Count && roleFreeParty.FindAll(x => x == 0).Count == roleFreeParty.Count))
+                            {
+                                // Zero
+                                status.Tank = 0;
+                                status.TankMax = 0;
+                                status.Healer = 0;
+                                status.HealerMax = 0;
+                                status.Dps = 0;
+                                status.DpsMax = 0;
+                                status.NonRole = 0;
+                                status.NonRoleMax = 0;
+                            }
+                            else if (normalParty.FindAll(x => x > 24).Count == 0 && roleFreeParty.FindAll(x => x > 24).Count > 0)
+                            {
+                                // Normal party
+                                status.PartyState = PartyState.NORMAL;
+                                status.Tank = tank;
+                                status.TankMax = tankMax;
+                                status.Healer = healer;
+                                status.HealerMax = healerMax;
+                                status.Dps = dps;
+                                status.DpsMax = dpsMax;
+                                status.NonRole = 0;
+                                status.NonRoleMax = 0;
+                            }
+                            else if (normalParty.FindAll(x => x > 24).Count > 0 && roleFreeParty.FindAll(x => x > 24).Count == 0)
+                            {
+                                // Role-Free party
+                                status.PartyState = PartyState.ROLEFREE;
+                                status.Tank = 0;
+                                status.TankMax = 0;
+                                status.Healer = 0;
+                                status.HealerMax = 0;
+                                status.Dps = 0;
+                                status.DpsMax = 0;
+                                status.NonRole = nonRole;
+                                status.NonRoleMax = nonRoleMax;
+                            }
+                            else
+                            {
+                                // all data is valid data.
+                                // Can't resolve PartyState.
+                                status.Tank = tank;
+                                status.TankMax = tankMax;
+                                status.Healer = healer;
+                                status.HealerMax = healerMax;
+                                status.Dps = dps;
+                                status.DpsMax = dpsMax;
+                                status.NonRole = nonRole;
+                                status.NonRoleMax = nonRoleMax;
+                            }
+
                             status.MatchingState = MatchingState.MATCHED;
                         }
 
                         DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Matched: Tank:{0}/{1} Healer:{2}/{3} DPS:{4}/{5}",
-                            tank, tankMax, healer, healerMax, dps, dpsMax);
+                        LogInfo("DFA: Matched: Tank:{0}/{1} Healer:{2}/{3} DPS:{4}/{5} NonRole:{6}/{7}",
+                            tank, tankMax, healer, healerMax, dps, dpsMax, nonRole, nonRoleMax);
 
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "Completed").Opcode)
@@ -483,9 +568,6 @@ namespace Qitana.DFAPlugin
                 LogInfo("DFA: Exception: {0}", ex.Message);
             }
         }
-
-
-
 
         public override System.Windows.Forms.Control CreateConfigControl()
         {
