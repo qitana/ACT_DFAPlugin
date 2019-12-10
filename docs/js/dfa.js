@@ -218,22 +218,32 @@ var dfa = new Vue({
           newStatus.IsRoulette = false;
         }
 
-        // When flows theoretical maximum count over, ignore retrived count and show "?" instead
-        if (newStatus.TankMax > 24 || newStatus.HealerMax > 24 || newStatus.DpsMax > 24 ||
-            newStatus.Tank    > 24 || newStatus.Healer    > 24 || newStatus.Dps    > 24)
-        {
-          newStatus.MatchingStateString = "MATCHED (FreeRole)";
-          newStatus.TankMax = "?";
-          newStatus.HealerMax = "?";
-          newStatus.DpsMax = "?";
-          newStatus.Tank = "?";
-          newStatus.Healer = "?";
-          newStatus.Dps = "?";
-          newStatus.Remains = "???";
+        // 残りの人数計算
+
+        // 互換用
+        if (!newStatus.PartyStateString) {
+          newStatus.PartyStateString = "NORMAL"
+          if (newStatus.TankMax > 24 || newStatus.HealerMax > 24 || newStatus.DpsMax > 24 ||
+            newStatus.Tank > 24 || newStatus.Healer > 24 || newStatus.Dps > 24) {
+            newStatus.TankMax = 0;
+            newStatus.HealerMax = 0;
+            newStatus.DpsMax = 0;
+            newStatus.Tank = 0;
+            newStatus.Healer = 0;
+            newStatus.Dps = 0;
+          }
         }
-        else
-        {
-          // 残りの人数計算
+
+
+        if (newStatus.IsMatched) {
+          if (newStatus.PartyStateString == "NORMAL") {
+            newStatus.Remains = (newStatus.TankMax - newStatus.Tank) + (newStatus.HealerMax - newStatus.Healer) + (newStatus.DpsMax - newStatus.Dps)
+          } else if (newStatus.PartyStateString == "ROLEFREE") {
+            newStatus.Remains = newStatus.NonRoleMax - newStatus.NonRole;
+          } else {
+            newStatus.Remains = "??"
+          }
+        } else {
           newStatus.Remains = (newStatus.TankMax - newStatus.Tank) + (newStatus.HealerMax - newStatus.Healer) + (newStatus.DpsMax - newStatus.Dps)
         }
 
