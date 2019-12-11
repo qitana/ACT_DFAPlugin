@@ -186,9 +186,13 @@ var dfa = new Vue({
             newStatus.QueueStarted = new Date();
           }
           // Calc EWT
-          newStatus.ExpectedWaitTimeSeconds = ((newStatus.WaitTime * 60 * 1000) - (Date.now() - newStatus.QueueStarted)) / 1000;
-          if (newStatus.ExpectedWaitTimeSeconds <= 0) {
-            newStatus.ExpectedWaitTimeSeconds = 0;
+          if (newStatus.WaitTime > 0) {
+            newStatus.ExpectedWaitTimeSeconds = ((newStatus.WaitTime * 60 * 1000) - (Date.now() - newStatus.QueueStarted)) / 1000;
+            if (newStatus.ExpectedWaitTimeSeconds <= 0) {
+              newStatus.ExpectedWaitTimeSeconds = 0;
+            }
+          } else {
+            newStatus.ExpectedWaitTimeSeconds = 30 * 60;
           }
           newStatus.IsQueued = true;
         } else {
