@@ -75,6 +75,7 @@ let localeStrings = {
     avgWaitTime: 'Avg. Wait time',
     expectedWaitTime: 'EWT',
     partyStatus: "Party Status",
+    llsWaitTime: 'EWT by DFA',
   },
   'Japanese': {
     status: 'ステータス',
@@ -85,9 +86,10 @@ let localeStrings = {
     remainings: '残り',
     numberOfPeople: '人',
     numberOfPeopleWaiting: '人待ち',
-    avgWaitTime: '平均待機時間',
-    expectedWaitTime: '推定待ち時間',
+    avgWaitTime: '待機時間',
+    expectedWaitTime: '予測待ち時間',
     partyStatus: "構築状況",
+    llsWaitTime: 'DFAによる予測',
   },
 };
 
@@ -107,6 +109,7 @@ var dfa = new Vue({
     status: {
       Hide: true,
     },
+    waitQueueData: [],
     strings: {},
     dungeons: {},
     roulettes: {},
@@ -184,6 +187,7 @@ var dfa = new Vue({
         if (newStatus.MatchingStateString == "QUEUED") {
           if (this.status.MatchingStateString == "IDLE") {
             newStatus.QueueStarted = new Date();
+            this.waitQueueData = []
           }
           // Calc EWT
           if (newStatus.WaitTime > 0) {
@@ -194,9 +198,25 @@ var dfa = new Vue({
           } else {
             newStatus.ExpectedWaitTimeSeconds = 30 * 60;
           }
+          // calc LLS
+          if (newStatus.WaitList > 0 && newStatus.WaitList != this.status.WaitList) {
+            let qData = [Date.now(), newStatus.WaitList]
+            this.waitQueueData.push(qData);
+          }
+          if (this.waitQueueData.length > 1) {
+            var lls = leastSquare(this.waitQueueData);
+            newStatus.LLSWaitTimeSeconds = ((-1 * (lls.b / lls.a)) - Date.now()) / 1000;
+            if (newStatus.LLSWaitTimeSeconds <= 0) {
+              newStatus.LLSWaitTimeSeconds = 0.0001;
+            }
+          } else {
+            newStatus.LLSWaitTimeSeconds = NaN
+          }
+
           newStatus.IsQueued = true;
         } else {
           newStatus.ExpectedWaitTimeSeconds = 0;
+          newStatus.LLSWaitTimeSeconds = NaN
           newStatus.IsQueued = false;
         }
 
@@ -271,3 +291,39 @@ var dfa = new Vue({
   },
 });
 
+
+function sum(data, func) {
+  var val = 0;
+  for (var i = 0; i < data.length; i++) {
+    val += func(data[i]);
+  }
+  return val;
+}
+
+function leastSquare(data) {
+  var N = data.length;
+  var sumX = sum(data, function (item) {
+    return item[0];
+  });
+  var sumX2 = sum(data, function (item) {
+    return item[0] * item[0];
+  });
+  var sumY = sum(data, function (item) {
+    return item[1];
+  });
+  var sumXY = sum(data, function (item) {
+    return item[0] * item[1];
+  });
+
+  var a, b;
+  var denominator = (N * sumX2) - Math.pow(sumX, 2);
+  var molecule1 = (N * sumXY) - (sumX * sumY);
+  a = molecule1 / denominator;
+  var molecule2 = (sumX2 * sumY) - (sumXY * sumX);
+  b = molecule2 / denominator;
+
+  return {
+    a: a,
+    b: b
+  };
+}

@@ -21,17 +21,25 @@
               <span class="header">{{ strings.status }}: </span>
               <span class="value">{{ status.MatchingStateString }}</span>
               <span v-if="status.IsQueued || !locked" class="value">( </span>
-              <span v-if="(status.IsQueued && status.IsRoulette) || !locked" class="value">{{ status.WaitList }}
+              <span v-if="(status.IsQueued && status.IsRoulette) || !locked" class="value">
+                {{ status.WaitList > 0 ? status.WaitList : "??" }}
                 {{ strings.numberOfPeopleWaiting }} / </span>
-              <span v-if="status.IsQueued || !locked" class="value"> {{ strings.avgWaitTime }}: {{ status.WaitTime }}
-                {{ strings.minutes }} )</span>
+              <span v-if="status.IsQueued || !locked" class="value">
+                {{ strings.avgWaitTime }}: {{ status.WaitTime }} {{ strings.minutes }} )</span>
             </div>
           </div>
           <div v-if="status.IsQueued || !locked" class="box">
             <div class="name">
               <span class="header">{{ strings.expectedWaitTime }}: </span>
-              <span class="value">{{ Math.floor(status.ExpectedWaitTimeSeconds / 60) }} {{ strings.minutes }}
-                {{ Math.floor(status.ExpectedWaitTimeSeconds % 60) }} {{ strings.seconds }}</span>
+              <span class="value">
+                {{ Math.floor(status.ExpectedWaitTimeSeconds / 60) }} {{ strings.minutes }}
+                {{ Math.floor(status.ExpectedWaitTimeSeconds % 60) }} {{ strings.seconds }}
+              </span>
+              <span v-if="status.IsRoulette && status.LLSWaitTimeSeconds && !isNaN(status.LLSWaitTimeSeconds)"
+                class="value">( {{ strings.llsWaitTime}}:
+                {{ Math.floor(status.LLSWaitTimeSeconds / 60) }} {{ strings.minutes }}
+                {{ Math.floor(status.LLSWaitTimeSeconds % 60) }} {{ strings.seconds }} )
+              </span>
             </div>
           </div>
           <div v-if="status.RouletteCode != 0 || !locked" class="box">
