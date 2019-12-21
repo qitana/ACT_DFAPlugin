@@ -1,0 +1,92 @@
+<html>
+
+<head>
+	<title>DFA Minimal</title>
+	<link rel="stylesheet" href="css/dfa.css">
+	<link rel="stylesheet" href="css/minimal_skin.css">
+</head>
+
+<body>
+	<div id="vue" class="outer" v-bind:class="{ 'resize-handle': !locked, 'translucent': status.MatchingStateString == 'IDLE' }">
+		<!-- Current state -->
+		<div id="title-bar" class="front">DFA - {{ status.MatchingStateString }}</div>
+
+		<!-- When state is not idle, display details panel -->
+		<div class="center" v-cloak v-show="!(status.Hide && locked)" v-if="status.MatchingStateString != 'IDLE'">
+
+			<!-- Roulette or Dungeon name -->
+			<div class="blue text-center" v-if="status.DungeonCode == 0 && status.RouletteCode != 0">
+				<p>{{ roulettes[status.RouletteCode] }}</p>
+			</div>
+			<div v-if="status.DungeonCode != 0" class="blue text-center">
+				<p>{{ dungeons[status.DungeonCode] }}</p>
+			</div>
+
+			<!-- When queued, display queue status -->
+			<div v-if="status.IsQueued" class="inner front">
+				<progress id="progress-bar" class="text-center"></progress>
+				<div class="row">
+					<!-- How long in queued -->
+					<p id="elapsed_time" class="blue" v-if="status.LLSWaitTimeSeconds || status.ExpectedWaitTimeSeconds">--:--</p>
+
+					<!-- How many people waiting? -->
+					<p class="blue" v-if="status.Remains">{{ status.Remains }}</p>
+
+					<!-- ETA provided by ffxiv or dfa -->
+					<p id="wait_time" class="blue" v-if="!status.LLSWaitTimeSeconds && status.ExpectedWaitTimeSeconds">
+						{{ Math.floor(status.ExpectedWaitTimeSeconds / 60) < 10 ? "0" + Math.floor(status.ExpectedWaitTimeSeconds / 60) : Math.floor(status.ExpectedWaitTimeSeconds / 60) }}:{{ Math.floor(status.ExpectedWaitTimeSeconds % 60) < 10 ? "0" + Math.floor(status.ExpectedWaitTimeSeconds % 60) : Math.floor(status.ExpectedWaitTimeSeconds % 60) }}
+					</p>
+					<p id="wait_time" class="blue" v-if="status.IsRoulette && status.LLSWaitTimeSeconds && !isNaN(status.LLSWaitTimeSeconds)">
+						{{ Math.floor(status.LLSWaitTimeSeconds / 60) < 10 ? "0" + Math.floor(status.LLSWaitTimeSeconds / 60) : Math.floor(status.LLSWaitTimeSeconds / 60) }}:{{ Math.floor(status.LLSWaitTimeSeconds % 60) < 10 ? "0" + Math.floor(status.LLSWaitTimeSeconds % 60) : Math.floor(status.LLSWaitTimeSeconds % 60) }}
+					</p>
+				</div>
+			</div>
+
+			<!-- When matched, display party state -->
+			<div class="role" v-if="(status.IsQueued && !status.IsRoulette) || status.IsMatched">
+				<div id="tank" class="role" v-if="status.IsQueued || (status.IsMatched && status.PartyStateString != 'ROLEFREE')">
+					<div class="circle role-tank" v-for="n in status.TankMax" v-bind:class="[status.Tank >= n ? 'ready' : '']"></div>
+				</div>
+				<div id="healer" class="role" v-if="status.IsQueued || (status.IsMatched && status.PartyStateString != 'ROLEFREE')">
+					<div class="circle role-healer" v-for="n in status.HealerMax" v-bind:class="[status.Healer >= n ? 'ready' : '']"></div>
+				</div>
+				<div id="dps" class="role" v-if="status.IsQueued || (status.IsMatched && status.PartyStateString != 'ROLEFREE')">
+					<div class="circle role-dps" v-for="n in status.DpsMax" v-bind:class="[status.Dps >= n ? 'ready' : '']"></div>
+				</div>
+				<div id="non-role" class="role" v-if="status.IsMatched && status.PartyStateString != 'NORMAL'">
+					<div class="circle non-role" v-for="n in status.NonRoleMax" v-bind:class="[status.NonRole >= n ? 'ready' : '']"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/dfa.js"></script>
+	<script>
+		var elapsed_seconds = 0;
+
+		function PadZero(i)
+		{
+			return i < 10 ? "0" + i : i;
+		}
+
+		function Count()
+		{
+			if (document.getElementById("title-bar").textContent.indexOf("QUEUED") !== -1)
+			{
+				var wait_time = document.getElementById("wait_time").textContent.split(":");
+				elapsed_seconds++;
+				document.getElementById("elapsed_time").textContent = PadZero(Math.floor(elapsed_seconds / 60)) + ":" + PadZero(Math.floor(elapsed_seconds % 60));
+				document.getElementById("progress-bar").setAttribute("value", elapsed_seconds / (parseInt(wait_time[0]) * 60 + parseInt(wait_time[1])));
+			}
+			else
+			{
+				elapsed_seconds = 0;
+			}
+		}
+		setInterval(Count, 1000);
+	</script>
+</body>
+
+</html>
