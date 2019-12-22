@@ -1,8 +1,50 @@
 # ACT_DFAPlugin
 
+The add-on of [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin) which shows Duty Finder status.
+
+
 DutyFinder(コンテンツファインダー) のステータスをオーバーレイ表示する、[ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin) のアドオンです。  
-マッチングのコードは[easly1989/ffxiv_act_dfassist](https://github.com/easly1989/ffxiv_act_dfassist)
-で使用されているコードを参考にしています。
+
+
+[日本語の説明はこちら / README for ja-JP is here](#Japanese)
+
+## Requirements
+
+- [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin)
+
+## Features
+
+- Displays the dungeon name on mathed by Duty Finder.
+  - Also be notified by text-to-speech.
+- Show queue position and expeted wait time.
+  - The actual queue position is displayed even if the number of waits is 50 or more.
+
+## How to use
+
+1. Install [ngld/OverlayPlugin](https://github.com/ngld/OverlayPlugin).
+2. Download DFAPlugin from release page and extract it to any folder.  
+It is recommended that you create and place a separate folder with other plugins.
+3. Install DFAPlugin as an ACT plugin.
+4. Restart ACT once.
+5. Confirm that DFA EventSource is added to the OverlayPlugin setting screen.
+6. Add an overlay with OverlayPlugin. Select "MiniParse" as the type.
+7. On the setting screen, set the URL to `https://qitana.github.io/ACT_DFAPlugin/dfa.html`.
+8. Adjust the installation position and size, and lock when the position is determined.  
+When locked, the overlay will not be displayed, but will only be displayed when using the Duty Finder.
+
+
+## Other overlay type
+
+visit `https://qitana.github.io/ACT_DFAPlugin/`.  
+Please feel free to contribute another your overlay!
+
+## Special thanks
+
+The algorithm refers to 
+[easly1989/ffxiv_act_dfassist](https://github.com/easly1989/ffxiv_act_dfassist).
+
+
+# Japanese
 
 ## 注意事項
 **v2.x からは ngld/OverlayPlugin でないと動きません！hibiyasleep/OverlayPlugin では動きません！  
@@ -47,7 +89,12 @@ DutyFinder(コンテンツファインダー) のステータスをオーバー�
 8. 設置位置や大きさを調整し、位置が決まったらリサイズ/変更が出来ないようにロックします。  
    オーバーレイは見えなくなりますが、コンテンツファインダーを使用した際だけ表示されるようになります。
 
-## FAQ
+## 謝辞
+
+マッチングのコードは [easly1989/ffxiv_act_dfassist](https://github.com/easly1989/ffxiv_act_dfassist)
+で使用されているコードを参考にしています。
+
+## よくある質問
 
 ### CFで申請しても表示されない
 いくつか考えられますが、以下を確認して下さい
