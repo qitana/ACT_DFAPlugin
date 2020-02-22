@@ -2,7 +2,7 @@
   {
     "Notice": "Deprecated since v2.1.1. Use Started.",
     "Name": "DutyAccepted",
-    "Opcode": 648,
+    "Opcode": 370,
     "Offset": {
       "RouletteCode": 8,
       "DungeonCode": 12
@@ -10,7 +10,7 @@
   },
   {
     "Name": "Started",
-    "Opcode": 648,
+    "Opcode": 370,
     "Offset": {
       "RouletteCode": 8,
       "DungeonCode": 12
@@ -18,7 +18,7 @@
   },
   {
     "Name": "Matched",
-    "Opcode": 504,
+    "Opcode": 604,
     "Offset": {
       "RouletteCode": 2,
       "DungeonCode": 20,
@@ -27,11 +27,11 @@
   },
   {
     "Name": "Canceled",
-    "Opcode": 349
+    "Opcode": 668
   },
   {
     "Name": "WaitQueue",
-    "Opcode": 669,
+    "Opcode": 605,
     "Offset": {
       "WaitList": 6,
       "WaitTime": 7,
@@ -45,7 +45,7 @@
   },
   {
     "Name": "PartyUpdate",
-    "Opcode": 828,
+    "Opcode": 647,
     "Offset": {
       "Tank": 12,
       "TankMax": 13,
