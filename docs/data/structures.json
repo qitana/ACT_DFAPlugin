@@ -59,6 +59,9 @@
   },
   {
     "Name": "Completed",
-    "Opcode": 0
+    "Opcode": 720,
+    "Offset": {
+      "DungeonCode": 0
+    }
   }
 ]
