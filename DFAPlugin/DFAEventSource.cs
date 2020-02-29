@@ -388,11 +388,10 @@ namespace Qitana.DFAPlugin
                                 status.DungeonCode = dungeon;
                             }
                             status.MatchingState = MatchingState.QUEUED;
+
+                            DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                            LogInfo("DFA: Queued [{0}/{1}]", roulette, dungeon);
                         }
-
-                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Queued [{0}/{1}]", roulette, dungeon);
-
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "Matched").Opcode)
                     {
@@ -408,10 +407,10 @@ namespace Qitana.DFAPlugin
                             status.DungeonCode = dungeon;
                             status.PartyState = (roleFreeFlag > 0) ? PartyState.ROLEFREE : PartyState.NORMAL;
                             status.MatchingState = MatchingState.MATCHED;
-                        }
-                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Matched [{0}/{1}]", roulette, dungeon);
 
+                            DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                            LogInfo("DFA: Matched [{0}/{1}]", roulette, dungeon);
+                        }
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "Canceled").Opcode)
                     {
@@ -419,10 +418,10 @@ namespace Qitana.DFAPlugin
                         lock (status.LockObject)
                         {
                             status.Clear();
-                        }
 
-                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Canceled");
+                            DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                            LogInfo("DFA: Canceled");
+                        }
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "WaitQueue").Opcode)
                     {
@@ -449,12 +448,11 @@ namespace Qitana.DFAPlugin
                             status.NonRole = 0;
                             status.NonRoleMax = 0;
                             status.MatchingState = MatchingState.QUEUED;
+
+                            DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                            LogInfo("DFA: Queued: WaitList:{0} WaitTime:{1} Tank:{2}/{3} Healer:{4}/{5} DPS:{6}/{7}",
+                                waitList, waitTime, tank, tankMax, healer, healerMax, dps, dpsMax);
                         }
-
-                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Queued: WaitList:{0} WaitTime:{1} Tank:{2}/{3} Healer:{4}/{5} DPS:{6}/{7}",
-                            waitList, waitTime, tank, tankMax, healer, healerMax, dps, dpsMax);
-
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "PartyUpdate").Opcode)
                     {
@@ -484,7 +482,6 @@ namespace Qitana.DFAPlugin
 
                             var normalParty = new List<int> { tank, tankMax, healer, healerMax, dps, dpsMax };
                             var roleFreeParty = new List<int> { nonRole, nonRoleMax };
-
 
                             if ((normalParty.FindAll(x => x > 24).Count > 0 && roleFreeParty.FindAll(x => x > 24).Count > 0) ||
                                 (normalParty.FindAll(x => x == 0).Count == normalParty.Count && roleFreeParty.FindAll(x => x == 0).Count == roleFreeParty.Count))
@@ -540,22 +537,23 @@ namespace Qitana.DFAPlugin
                             }
 
                             status.MatchingState = MatchingState.MATCHED;
+
+                            DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                            LogInfo("DFA: Matched: Tank:{0}/{1} Healer:{2}/{3} DPS:{4}/{5} NonRole:{6}/{7}",
+                                tank, tankMax, healer, healerMax, dps, dpsMax, nonRole, nonRoleMax);
                         }
-
-                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Matched: Tank:{0}/{1} Healer:{2}/{3} DPS:{4}/{5} NonRole:{6}/{7}",
-                            tank, tankMax, healer, healerMax, dps, dpsMax, nonRole, nonRoleMax);
-
                     }
                     else if (opcode == Config.Structures.FirstOrDefault(x => x.Name == "Completed").Opcode)
                     {
+                        var structure = Config.Structures.FirstOrDefault(x => x.Name == "Completed");
+                        var dungeon = BitConverter.ToUInt16(data, structure.Offset.DungeonCode);
+
                         lock (status.LockObject)
                         {
-                            status.Clear();
+                            status.DungeonCode = dungeon;
+                            DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
+                            LogInfo("DFA: Completed [{0}/{1}]", status.RouletteCode, status.DungeonCode);
                         }
-
-                        DFAStatusUpdate(new JSEvents.DFAStatusUpdateEvent(status.ToJson()));
-                        LogInfo("DFA: Competed");
                     }
                 }
                 catch (Exception ex)

@@ -109,6 +109,10 @@ var dfa = new Vue({
     status: {
       Hide: true,
     },
+    ttsCalledState: {
+      roulette: false,
+      dungeon: false,
+    },
     waitQueueData: [],
     strings: {},
     dungeons: {},
@@ -222,18 +226,35 @@ var dfa = new Vue({
 
         // Matched
         if (newStatus.MatchingStateString == "MATCHED") {
-          if (this.status.IsMatched == false) {
+
+          // Call RouletteTTS
+          if (!this.ttsCalledState.roulette && newStatus.RouletteCode > 0) {
+            let text = this.roulettes[newStatus.RouletteCode]
+            for (var key in this.phonetics) {
+              text = text.replace(key, this.phonetics[key]);
+            }
+            window.callOverlayHandler({ call: 'DFATTS', text: text })
+            this.ttsCalledState.roulette = true;
+          }
+
+          // Call DungeonTTS
+          if (!this.ttsCalledState.dungeon && newStatus.DungeonCode > 0) {
             let text = this.dungeons[newStatus.DungeonCode]
             for (var key in this.phonetics) {
               text = text.replace(key, this.phonetics[key]);
             }
             window.callOverlayHandler({ call: 'DFATTS', text: text })
+            this.ttsCalledState.dungeon = true;
           }
+          
           newStatus.IsMatched = true;
           newStatus.lastMatched = Date.now();
         } else {
           newStatus.IsMatched = false;
+          this.ttsCalledState.roulette = false;
+          this.ttsCalledState.dungeon = false;
         }
+        
 
         // Roulette
         if (Number(newStatus.RouletteCode) > 0) {
