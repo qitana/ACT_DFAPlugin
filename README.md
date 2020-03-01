@@ -14,9 +14,9 @@ DutyFinder(コンテンツファインダー) のステータスをオーバー�
 
 ## Features
 
-- Displays the dungeon name on mathed by Duty Finder.
+- Displayed when the roulette name and dungeon name have been determined.
   - Also be notified by text-to-speech.
-- Show queue position and expeted wait time.
+- Displays the queue position and estimated waiting time.
   - The actual queue position is displayed even if the number of waits is 50 or more.
 
 ## How to use
@@ -54,8 +54,7 @@ The algorithm refers to
 - hibiyasleep/OverlayPlugin のアドオンは ngld/OverlayPlugin では動きません。
 
 ## できること
-- ルーレットでシャキった時点で、どのコンテンツにマッチしたのか分かります。
-- シャキった際にコンテンツ名をTTSで通知できます。
+- 突入場所が判明した際にルーレット名およびコンテンツ名をTTSで通知できます。
 - ネットワークデータで待ち人数/更新時間が更新(1分間隔)され次第、表示が更新されます。    
   ゲームクライアントでは、データ到着から30秒後に1個前のデータとの中間値を表示しています。  
   (おそらく変化を緩やかにするためだと思われます。)
