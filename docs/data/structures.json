@@ -1,7 +1,7 @@
 [
   {
     "Name": "Started",
-    "Opcode": 560,
+    "Opcode": 975,
     "Offset": {
       "RouletteCode": 8,
       "DungeonCode": 12
@@ -9,7 +9,7 @@
   },
   {
     "Name": "Matched",
-    "Opcode": 325,
+    "Opcode": 253,
     "Offset": {
       "RouletteCode": 2,
       "DungeonCode": 20,
@@ -18,11 +18,11 @@
   },
   {
     "Name": "Canceled",
-    "Opcode": 183
+    "Opcode": 778
   },
   {
     "Name": "WaitQueue",
-    "Opcode": 871,
+    "Opcode": 320,
     "Offset": {
       "WaitList": 6,
       "WaitTime": 7,
@@ -36,7 +36,7 @@
   },
   {
     "Name": "PartyUpdate",
-    "Opcode": 774,
+    "Opcode": 394,
     "Offset": {
       "Tank": 12,
       "TankMax": 13,
@@ -50,7 +50,7 @@
   },
   {
     "Name": "Completed",
-    "Opcode": 920,
+    "Opcode": 359,
     "Offset": {
       "DungeonCode": 0
     }
