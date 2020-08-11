@@ -520,7 +520,15 @@
                     "731":  "Ocean Fishing",
                     "732":  "Ocean Fishing",
                     "733":  "Ocean Fishing",
-                    "734":  "Ocean Fishing"
+                    "734":  "Ocean Fishing",
+                    "736":  "the Puppets\u0027 Bunker",
+                    "737":  "the Heroes\u0027 Gauntlet",
+                    "738":  "the Seat of Sacrifice",
+                    "739":  "the Seat of Sacrifice (Extreme)",
+                    "740":  "Sleep Now in Sapphire",
+                    "741":  "Sleep Now in Sapphire",
+                    "743":  "Faded Memories",
+                    "744":  "the Akh Afah Amphitheatre (Unreal)"
                 },
     "French":  {
                    "1":  "les Mille Gueules de Toto-Rak",
@@ -1010,7 +1018,7 @@
                    "697":  "Durinn, marionnettiste d\u0027outre-tombe",
                    "698":  "La mélodie du feu et de l\u0027eau",
                    "699":  "Siegfried, le plus grand bretteur du monde",
-                   "700":  "Réplique de l\u0027usine désaffectée",
+                   "700":  "La réplique de l\u0027usine désaffectée",
                    "701":  "Onsal Hakair (Danshig Naadam)",
                    "702":  "Vœux de vertu, actes de cruauté",
                    "703":  "À l\u0027écoute de soi",
@@ -1043,7 +1051,15 @@
                    "731":  "Pêche en mer",
                    "732":  "Pêche en mer",
                    "733":  "Pêche en mer",
-                   "734":  "Pêche en mer"
+                   "734":  "Pêche en mer",
+                   "736":  "La base militaire des Pantins",
+                   "737":  "La Traversée de Norvrandt",
+                   "738":  "Le Trône du Sacrifice",
+                   "739":  "Le Trône du Sacrifice (extrême)",
+                   "740":  "Sur la mer de saphir",
+                   "741":  "Sur la mer de saphir",
+                   "743":  "Souvenir périssable",
+                   "744":  "l\u0027Amphithéâtre d\u0027Akh Afah (irréel)"
                },
     "German":  {
                    "1":  "Tausend Löcher von Toto-Rak",
@@ -1566,7 +1582,15 @@
                    "731":  "Auf großer Fahrt",
                    "732":  "Auf großer Fahrt",
                    "733":  "Auf großer Fahrt",
-                   "734":  "Auf großer Fahrt"
+                   "734":  "Auf großer Fahrt",
+                   "736":  "Die Puppenfestung",
+                   "737":  "Schlacht um Norvrandt",
+                   "738":  "Krieger des Lichts",
+                   "739":  "Krieger des Lichts (extrem)",
+                   "740":  "Luftangriff auf Werlyt",
+                   "741":  "Luftangriff auf Werlyt",
+                   "743":  "Verblasste Erinnerungen",
+                   "744":  "Traumprüfung - Shiva"
                },
     "Japanese":  {
                      "1":  "監獄廃墟 トトラクの千獄",
@@ -2089,6 +2113,14 @@
                      "731":  "オーシャンフィッシング",
                      "732":  "オーシャンフィッシング",
                      "733":  "オーシャンフィッシング",
-                     "734":  "オーシャンフィッシング"
+                     "734":  "オーシャンフィッシング",
+                     "736":  "人形タチノ軍事基地",
+                     "737":  "漆黒決戦 ノルヴラント",
+                     "738":  "ウォーリア・オブ・ライト討滅戦",
+                     "739":  "極ウォーリア・オブ・ライト討滅戦",
+                     "740":  "飛べ！ ウェルリトへ ",
+                     "741":  "飛べ！ ウェルリトへ ",
+                     "743":  "色あせた記憶",
+                     "744":  "幻シヴァ討滅戦"
                  }
 }
