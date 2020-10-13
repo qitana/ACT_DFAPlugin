@@ -36,7 +36,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button_SaveMessage = new System.Windows.Forms.Button();
-            this.checkBox_CurrentFilter = new System.Windows.Forms.CheckBox();
+            this.checkBox_SuspendCapture = new System.Windows.Forms.CheckBox();
+            this.checkBox_Undersized = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox_Messages
@@ -52,7 +53,7 @@
             this.textBox_Messages.Name = "textBox_Messages";
             this.textBox_Messages.ReadOnly = true;
             this.textBox_Messages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_Messages.Size = new System.Drawing.Size(687, 385);
+            this.textBox_Messages.Size = new System.Drawing.Size(871, 396);
             this.textBox_Messages.TabIndex = 0;
             this.textBox_Messages.WordWrap = false;
             // 
@@ -60,9 +61,9 @@
             // 
             this.checkBox_Filter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox_Filter.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox_Filter.Location = new System.Drawing.Point(582, 418);
+            this.checkBox_Filter.Location = new System.Drawing.Point(890, 400);
             this.checkBox_Filter.Name = "checkBox_Filter";
-            this.checkBox_Filter.Size = new System.Drawing.Size(100, 22);
+            this.checkBox_Filter.Size = new System.Drawing.Size(87, 22);
             this.checkBox_Filter.TabIndex = 5;
             this.checkBox_Filter.Text = "Start Filter";
             this.checkBox_Filter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -75,20 +76,20 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_Filtered.BackColor = System.Drawing.SystemColors.Window;
             this.textBox_Filtered.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_Filtered.Location = new System.Drawing.Point(706, 26);
+            this.textBox_Filtered.Location = new System.Drawing.Point(890, 26);
             this.textBox_Filtered.MaxLength = 0;
             this.textBox_Filtered.Multiline = true;
             this.textBox_Filtered.Name = "textBox_Filtered";
             this.textBox_Filtered.ReadOnly = true;
             this.textBox_Filtered.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox_Filtered.Size = new System.Drawing.Size(82, 385);
+            this.textBox_Filtered.Size = new System.Drawing.Size(82, 363);
             this.textBox_Filtered.TabIndex = 1;
             this.textBox_Filtered.WordWrap = false;
             // 
             // button_ClearMessages
             // 
             this.button_ClearMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_ClearMessages.Location = new System.Drawing.Point(12, 418);
+            this.button_ClearMessages.Location = new System.Drawing.Point(12, 429);
             this.button_ClearMessages.Name = "button_ClearMessages";
             this.button_ClearMessages.Size = new System.Drawing.Size(120, 23);
             this.button_ClearMessages.TabIndex = 2;
@@ -99,9 +100,9 @@
             // button_ClearFilter
             // 
             this.button_ClearFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_ClearFilter.Location = new System.Drawing.Point(688, 417);
+            this.button_ClearFilter.Location = new System.Drawing.Point(890, 428);
             this.button_ClearFilter.Name = "button_ClearFilter";
-            this.button_ClearFilter.Size = new System.Drawing.Size(100, 23);
+            this.button_ClearFilter.Size = new System.Drawing.Size(87, 23);
             this.button_ClearFilter.TabIndex = 6;
             this.button_ClearFilter.Text = "Clear Filter";
             this.button_ClearFilter.UseVisualStyleBackColor = true;
@@ -120,7 +121,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(704, 9);
+            this.label2.Location = new System.Drawing.Point(888, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 12);
             this.label2.TabIndex = 6;
@@ -129,7 +130,7 @@
             // button_SaveMessage
             // 
             this.button_SaveMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_SaveMessage.Location = new System.Drawing.Point(138, 418);
+            this.button_SaveMessage.Location = new System.Drawing.Point(138, 429);
             this.button_SaveMessage.Name = "button_SaveMessage";
             this.button_SaveMessage.Size = new System.Drawing.Size(120, 23);
             this.button_SaveMessage.TabIndex = 3;
@@ -137,25 +138,40 @@
             this.button_SaveMessage.UseVisualStyleBackColor = true;
             this.button_SaveMessage.Click += new System.EventHandler(this.button_SaveMessage_Click);
             // 
-            // checkBox_CurrentFilter
+            // checkBox_SuspendCapture
             // 
-            this.checkBox_CurrentFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox_CurrentFilter.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBox_CurrentFilter.Location = new System.Drawing.Point(436, 418);
-            this.checkBox_CurrentFilter.Name = "checkBox_CurrentFilter";
-            this.checkBox_CurrentFilter.Size = new System.Drawing.Size(140, 22);
-            this.checkBox_CurrentFilter.TabIndex = 4;
-            this.checkBox_CurrentFilter.Text = "Set Current Filter";
-            this.checkBox_CurrentFilter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBox_CurrentFilter.UseVisualStyleBackColor = true;
-            this.checkBox_CurrentFilter.CheckedChanged += new System.EventHandler(this.checkBox_CurrentFilter_CheckedChanged);
+            this.checkBox_SuspendCapture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_SuspendCapture.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBox_SuspendCapture.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.checkBox_SuspendCapture.Checked = true;
+            this.checkBox_SuspendCapture.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_SuspendCapture.Location = new System.Drawing.Point(744, 429);
+            this.checkBox_SuspendCapture.Name = "checkBox_SuspendCapture";
+            this.checkBox_SuspendCapture.Size = new System.Drawing.Size(140, 22);
+            this.checkBox_SuspendCapture.TabIndex = 4;
+            this.checkBox_SuspendCapture.Text = "Resume Capture";
+            this.checkBox_SuspendCapture.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBox_SuspendCapture.UseVisualStyleBackColor = false;
+            this.checkBox_SuspendCapture.CheckedChanged += new System.EventHandler(this.checkBox_SuspendCapture_CheckedChanged);
+            // 
+            // checkBox_Undersized
+            // 
+            this.checkBox_Undersized.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox_Undersized.AutoSize = true;
+            this.checkBox_Undersized.Location = new System.Drawing.Point(603, 432);
+            this.checkBox_Undersized.Name = "checkBox_Undersized";
+            this.checkBox_Undersized.Size = new System.Drawing.Size(135, 16);
+            this.checkBox_Undersized.TabIndex = 7;
+            this.checkBox_Undersized.Text = "Undersized solo party";
+            this.checkBox_Undersized.UseVisualStyleBackColor = true;
             // 
             // DFATraceWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.checkBox_CurrentFilter);
+            this.ClientSize = new System.Drawing.Size(984, 461);
+            this.Controls.Add(this.checkBox_Undersized);
+            this.Controls.Add(this.checkBox_SuspendCapture);
             this.Controls.Add(this.button_SaveMessage);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -181,6 +197,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button_SaveMessage;
-        private System.Windows.Forms.CheckBox checkBox_CurrentFilter;
+        private System.Windows.Forms.CheckBox checkBox_SuspendCapture;
+        private System.Windows.Forms.CheckBox checkBox_Undersized;
     }
 }
