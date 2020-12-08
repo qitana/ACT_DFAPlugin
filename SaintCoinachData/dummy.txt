@@ -1,7 +1,7 @@
 1. Start SaintCoinach.Cmd and run following subcommands:
 
-- allexd ContentFinderCondition
-- allexd ContentRoulette
+- allexd ContentFinderCondition OR allrawexd ContentFinderCondition
+- allexd ContentRoulette OR allrawexd ContentRoulette
 
 2. copy "exd-all" here
 
