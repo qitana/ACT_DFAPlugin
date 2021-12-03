@@ -304,7 +304,7 @@ namespace Qitana.DFAPlugin
                          ActGlobals.oFormActMain.ActPlugins
                          .Where(x =>
                          x.pluginFile.Name.ToUpper().Contains("FFXIV_ACT_Plugin".ToUpper()) &&
-                         x.lblPluginStatus.Text.ToUpper().Contains("FFXIV Plugin Started.".ToUpper()))
+                         x.lblPluginStatus.Text.ToUpper().Contains("FFXIV_ACT_Plugin Started.".ToUpper()))
                          .Select(x => x.pluginObj)
                          .FirstOrDefault();
                     return;
