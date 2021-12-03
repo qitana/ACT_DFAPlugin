@@ -1,7 +1,7 @@
 ﻿{
     "English":  {
                     "1":  "Duty Roulette: Leveling",
-                    "2":  "Duty Roulette: Level 50/60/70 Dungeons",
+                    "2":  "Duty Roulette: Level 50/60/70/80 Dungeons",
                     "3":  "Duty Roulette: Main Scenario",
                     "4":  "Duty Roulette: Guildhests",
                     "5":  "Duty Roulette: Expert",
@@ -38,7 +38,7 @@
                 },
     "French":  {
                    "1":  "Mission aléatoire : gain de niveaux",
-                   "2":  "Mission aléatoire : donjons nv 50/60/70",
+                   "2":  "Mission aléatoire : donjons nv 50/60/70/80",
                    "3":  "Mission aléatoire : épopée",
                    "4":  "Mission aléatoire : opérations de guilde",
                    "5":  "Mission aléatoire : expert",
@@ -75,7 +75,7 @@
                },
     "German":  {
                    "1":  "Zufallsinhalt: Stufensteigerung",
-                   "2":  "Zufallsinhalt: Stufe 50/60/70",
+                   "2":  "Zufallsinhalt: Stufe 50/60/70/80",
                    "3":  "Zufallsinhalt: Hauptszenario",
                    "4":  "Zufallsinhalt: Gildengeheiß",
                    "5":  "Zufallsinhalt: Experte",
@@ -112,7 +112,7 @@
                },
     "Japanese":  {
                      "1":  "コンテンツルーレット：レべリング",
-                     "2":  "コンテンツルーレット：レベル50・60・70ダンジョン",
+                     "2":  "コンテンツルーレット：レベル50・60・70・80ダンジョン",
                      "3":  "コンテンツルーレット：メインクエスト",
                      "4":  "コンテンツルーレット：ギルドオーダー",
                      "5":  "コンテンツルーレット：エキスパート",
