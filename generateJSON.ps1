@@ -74,4 +74,4 @@ $roulette.Add("Japanese", $roulette_ja);
 
 $roulette | ConvertTo-Json -Depth 100 | Out-File -Encoding UTF8 (Join-Path $script:jsonDataDir "roulette.json")
 
-Set-Location $startdir
+#Set-Location $startdir
