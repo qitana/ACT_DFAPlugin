@@ -9,10 +9,7 @@
                     "7":  "Daily Challenge: Frontline",
                     "8":  "Duty Roulette: Level 80 Dungeons",
                     "9":  "Duty Roulette: Mentor",
-                    "11":  "The Feast (Training Match)",
-                    "13":  "The Feast (Ranked Match)",
                     "15":  "Duty Roulette: Alliance Raids",
-                    "16":  "The Feast (Team Ranked Match)",
                     "17":  "Duty Roulette: Normal Raids",
                     "18":  "Chocobo Race: Sagolii Road",
                     "19":  "Chocobo Race: Costa del Sol",
@@ -34,7 +31,9 @@
                     "35":  "Chocobo Race: Random",
                     "36":  "Chocobo Race: Random",
                     "37":  "Chocobo Race: Random",
-                    "38":  "Chocobo Race: Random"
+                    "38":  "Chocobo Race: Random",
+                    "40":  "Crystalline Conflict (Casual Match)",
+                    "41":  "Crystalline Conflict (Ranked Match)"
                 },
     "French":  {
                    "1":  "Mission aléatoire : gain de niveaux",
@@ -46,10 +45,7 @@
                    "7":  "Challenge quotidien : Front",
                    "8":  "Mission aléatoire : donjons nv 80",
                    "9":  "Mission aléatoire : mentor",
-                   "11":  "The Feast (entraînement)",
-                   "13":  "The Feast (classé)",
                    "15":  "Mission aléatoire : raids en alliance",
-                   "16":  "The Feast (classé/équipe JcJ)",
                    "17":  "Mission aléatoire : raids normaux",
                    "18":  "Course de chocobos : Route de Sagolii",
                    "19":  "Course de chocobos : Costa del Sol",
@@ -71,7 +67,9 @@
                    "35":  "Course de chocobos : aléatoire",
                    "36":  "Course de chocobos : aléatoire",
                    "37":  "Course de chocobos : aléatoire",
-                   "38":  "Course de chocobos : aléatoire"
+                   "38":  "Course de chocobos : aléatoire",
+                   "40":  "Crystalline Conflict (partie non classée)",
+                   "41":  "Crystalline Conflict (partie classée)"
                },
     "German":  {
                    "1":  "Zufallsinhalt: Stufensteigerung",
@@ -83,10 +81,7 @@
                    "7":  "Tagesherausforderung: PvP-Front",
                    "8":  "Zufallsinhalt: Stufe 80",
                    "9":  "Zufallsinhalt: Mentor",
-                   "11":  "The Feast (Übungskampf)",
-                   "13":  "The Feast (gewertet)",
                    "15":  "Zufallsinhalt: Allianz-Raid",
-                   "16":  "The Feast (Team, gewertet)",
                    "17":  "Zufallsinhalt: Normaler Raid",
                    "18":  "Chocobo-Rennen: Sagolii-Straße",
                    "19":  "Chocobo-Rennen: Sonnenküste",
@@ -108,7 +103,9 @@
                    "35":  "Chocobo-Rennen: Zufallsstrecke",
                    "36":  "Chocobo-Rennen: Zufallsstrecke",
                    "37":  "Chocobo-Rennen: Zufallsstrecke",
-                   "38":  "Chocobo-Rennen: Zufallsstrecke"
+                   "38":  "Chocobo-Rennen: Zufallsstrecke",
+                   "40":  "Crystalline Conflict: Freies Spiel",
+                   "41":  "Crystalline Conflict: Gewertetes Spiel"
                },
     "Japanese":  {
                      "1":  "コンテンツルーレット：レべリング",
@@ -120,10 +117,7 @@
                      "7":  "デイリーチャレンジ：フロントライン",
                      "8":  "コンテンツルーレット：レベル80ダンジョン",
                      "9":  "コンテンツルーレット：メンター",
-                     "11":  "ザ・フィースト (カジュアルマッチ)",
-                     "13":  "ザ・フィースト (ランクマッチ)",
                      "15":  "コンテンツルーレット：アライアンスレイド",
-                     "16":  "ザ・フィースト (チーム用ランクマッチ)",
                      "17":  "コンテンツルーレット：ノーマルレイド",
                      "18":  "チョコボレース：サゴリーロード",
                      "19":  "チョコボレース：コスタ・デル・ソル",
@@ -145,6 +139,8 @@
                      "35":  "チョコボレース：コースルーレット",
                      "36":  "チョコボレース：コースルーレット",
                      "37":  "チョコボレース：コースルーレット",
-                     "38":  "チョコボレース：コースルーレット"
+                     "38":  "チョコボレース：コースルーレット",
+                     "40":  "クリスタルコンフリクト(カジュアルマッチ)",
+                     "41":  "クリスタルコンフリクト(ランクマッチ)"
                  }
 }
