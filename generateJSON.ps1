@@ -12,7 +12,7 @@ function GetDungeonData($csvFile) {
     return Get-Content ($csvFile) `
     | ConvertFrom-Csv `
     | Where-Object { [int]::TryParse($_.key, [ref]$null) } `
-    | Select-Object key, "39" `
+    | Select-Object key, "41" `
     | Sort-Object { [int]$_.key }
 }
 
@@ -35,10 +35,10 @@ $dungeon_fr = [ordered] @{ }
 $dungeon_de = [ordered] @{ }
 $dungeon_ja = [ordered] @{ }
 
-foreach ($x in $dungeon_data_en) { if ($x.38 -ne "") { $dungeon_en.Add($x.key, $x.39) } }
-foreach ($x in $dungeon_data_fr) { if ($x.38 -ne "") { $dungeon_fr.Add($x.key, $x.39) } }
-foreach ($x in $dungeon_data_de) { if ($x.38 -ne "") { $dungeon_de.Add($x.key, $x.39) } }
-foreach ($x in $dungeon_data_ja) { if ($x.38 -ne "") { $dungeon_ja.Add($x.key, $x.39) } }
+foreach ($x in $dungeon_data_en) { if ($x.41 -ne "") { $dungeon_en.Add($x.key, $x.41) } }
+foreach ($x in $dungeon_data_fr) { if ($x.41 -ne "") { $dungeon_fr.Add($x.key, $x.41) } }
+foreach ($x in $dungeon_data_de) { if ($x.41 -ne "") { $dungeon_de.Add($x.key, $x.41) } }
+foreach ($x in $dungeon_data_ja) { if ($x.41 -ne "") { $dungeon_ja.Add($x.key, $x.41) } }
 
 $dungeon = [ordered] @{ };
 $dungeon.Add("English", $dungeon_en);
