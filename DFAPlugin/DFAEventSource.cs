@@ -147,7 +147,7 @@ namespace Qitana.DFAPlugin
             // embedded timer is dsiabled
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
             DisposeTimers();
             base.Dispose();

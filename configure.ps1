@@ -81,7 +81,7 @@ if ((!(Test-Path ".\ThirdParty\OverlayPlugin\OverlayPlugin.Common.dll")) -or
         Write-Output "-----------------------------------------------------------------------"
         Write-Output "OverlayPlugin をダウンロードしています..."
     
-    $overlayPluginRepo = "ngld/OverlayPlugin"
+    $overlayPluginRepo = "OverlayPlugin/OverlayPlugin"
     $overlayPluginLatest = "https://api.github.com/repos/$overlayPluginRepo/releases"
     $overlayPlugin_download_url = (Invoke-WebRequest -Uri $overlayPluginLatest -UseBasicParsing | ConvertFrom-Json)[0].assets[0].browser_download_url
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
